@@ -1,0 +1,4 @@
+0 Lapiz
+1 Mano Abierta
+2 Ninguno
+3 Mano Cerrada
