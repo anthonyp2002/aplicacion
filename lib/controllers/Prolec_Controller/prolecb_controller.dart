@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:aplicacion/controllers/Prolec_Controller/prolecc_controller.dart';
+import 'package:aplicacion/models/prolecb_model.dart';
+import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import "package:get/get.dart";
 import 'package:flutter_tts/flutter_tts.dart';
@@ -8,7 +10,6 @@ import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:speech_to_text/speech_to_text.dart';
-import '../../api/data_img.dart';
 import '../../models/user.dart';
 
 enum TtsState { playing, stopped }
@@ -43,13 +44,15 @@ class ProlecbController extends GetxController {
   // ignore: unused_field
   late Timer _textDisplayTimer;
   var showButtons = false.obs;
+  List<OptionsModel> imgOption = [];
 
   @override
-  onInit() {
+  onInit() async {
     pageController = PageController(initialPage: 0);
     super.onInit();
     initTts();
     _speechTextStreamController = StreamController<String>.broadcast();
+    imgOption = await getImg();
   }
 
   initTts() {
@@ -116,7 +119,7 @@ class ProlecbController extends GetxController {
 
   void nextQuestions() {
     if (pageController.positions.isNotEmpty) {
-      if (pageController.page == Img().imgOption.length - 1) {
+      if (pageController.page == imgOption.length - 1) {
         print(puntuacion);
         Get.offAllNamed('/prolecC');
         Get.find<ProlecCController>().datos(use, tiempo, puntuacion);

@@ -1,5 +1,5 @@
-// ignore_for_file: non_constant_identifier_names
-
+// ignore_for_file: non_constant_identifier_names, unused_element
+import "package:aplicacion/models/prolecb_model.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 
 FirebaseFirestore db = FirebaseFirestore.instance;
@@ -28,8 +28,6 @@ Future<List<String>> getPal() async {
       .expand((wordList) => wordList)
       .toList();
 
-  print("From Firebase: $words");
-  print("Length: ${words[0]}");
   return words;
 }
 
@@ -41,22 +39,6 @@ Future<void> addStudent(
     "schoolYear": schoolYear,
     "password": password
   });
-}
-
-Future<void> addPunctuationOne(String time) async {
-  await db.collection("ExerciseOne").add({"time": time});
-}
-
-Future<void> addPunctuationTwo(String pnt) async {
-  await db.collection("ExerciseTwo").add({"scoreImg": pnt});
-}
-
-Future<void> addPunctuationThree(String pntH) async {
-  await db.collection("ExerciseTwo").add({"scoreHistory": pntH});
-}
-
-Future<void> addPalabras(List palabras) async {
-  await db.collection("Words").add({"word": palabras});
 }
 
 Future<void> addPunctuations(String nameUse, String time, int pnt, int pntH,
@@ -72,4 +54,30 @@ Future<void> addPunctuations(String nameUse, String time, int pnt, int pntH,
     "PunctuationOrtografia": pntOr,
     "PunctuationSinonimos": pntS
   });
+}
+
+Future<void> addIamges(
+    int id, String questions, Map<String, bool> answer) async {
+  await db.collection("Images").add({
+    "id": id,
+    "questions": questions,
+    "Answer": answer,
+  });
+}
+
+Future<List<OptionsModel>> getImg() async {
+  List<OptionsModel> img = [];
+  CollectionReference collectionReferenceImg = db.collection("Images");
+  QuerySnapshot queryImg = await collectionReferenceImg.get();
+
+  for (var document in queryImg.docs) {
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+    int id = data['id'];
+    String questions = data['questions'];
+    Map<String, bool> answer = Map<String, bool>.from(data['Answer']);
+
+    img.add(OptionsModel(id, questions, answer));
+  }
+  return img;
 }

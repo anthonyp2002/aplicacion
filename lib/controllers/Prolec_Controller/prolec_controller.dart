@@ -68,11 +68,9 @@ class ProlecController extends GetxController {
 
   initTts() {
     flutterTts = FlutterTts();
-
     flutterTts.setStartHandler(() {
       ttsState = TtsState.playing;
     });
-
     flutterTts.setCompletionHandler(() {
       ttsState = TtsState.stopped;
     });
@@ -194,11 +192,5 @@ class ProlecController extends GetxController {
     } else {
       startRecognition();
     }
-  }
-
-  Future<void> mostrar() async {
-    List<String> asdas = await getPal();
-    print("Firebase $asdas");
-    print("De mi flutter $palabras");
   }
 }

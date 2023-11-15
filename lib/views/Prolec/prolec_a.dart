@@ -85,7 +85,6 @@ class ProlecPage extends GetView<ProlecController> {
                       const SizedBox(width: 50),
                       RawMaterialButton(
                         onPressed: () {
-                          controller.mostrar();
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                                 builder: (context) =>

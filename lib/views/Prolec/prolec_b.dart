@@ -4,7 +4,6 @@ import 'package:aplicacion/controllers/Prolec_Controller/prolecc_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../api/data_img.dart';
 import '../../controllers/Prolec_Controller/prolecb_controller.dart';
 import '../../models/user.dart';
 
@@ -137,7 +136,7 @@ class ProlecTwo extends GetView<ProlecbController> {
                     child: PageView.builder(
                       controller: controller.pageController,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: Img().imgOption.length,
+                      itemCount: controller.imgOption.length,
                       itemBuilder: (context, index) {
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +146,7 @@ class ProlecTwo extends GetView<ProlecbController> {
                               width: 315,
                               height: 80,
                               child: Text(
-                                Img().imgOption[index].questions!,
+                                controller.imgOption[index].questions!,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.ysabeau(fontSize: 30),
                               ),
@@ -159,10 +158,8 @@ class ProlecTwo extends GetView<ProlecbController> {
                               height: 400,
                               child: GridView.count(
                                 crossAxisCount: 2,
-                                children: Img()
-                                    .imgOption[index]
-                                    .answer
-                                    .entries
+                                children: controller
+                                    .imgOption[index].answer.entries
                                     .map((image) {
                                   return GestureDetector(
                                     onTap: () {

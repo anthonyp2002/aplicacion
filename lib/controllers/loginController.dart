@@ -1,6 +1,4 @@
 // ignore_for_file: file_names, camel_case_types
-
-import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +38,6 @@ class loginController extends GetxController {
         }
       });
     }
-    getPal();
     user.clear();
     password.clear();
   }
