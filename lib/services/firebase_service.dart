@@ -1,4 +1,4 @@
-import "dart:ffi";
+// ignore_for_file: non_constant_identifier_names
 
 import "package:cloud_firestore/cloud_firestore.dart";
 
@@ -15,6 +15,22 @@ Future<List> getPuntuacion() async {
     exerciseOne.add(documento.data());
   });
   return exerciseOne;
+}
+
+Future<List<String>> getPal() async {
+  CollectionReference collectionReferenceWord = db.collection("Words");
+  QuerySnapshot queryWord = await collectionReferenceWord.get();
+
+  List<String> words = queryWord.docs
+      .map((documento) => (documento['word'] as List<dynamic>)
+          .map((dynamicWord) => dynamicWord.toString())
+          .toList())
+      .expand((wordList) => wordList)
+      .toList();
+
+  print("From Firebase: $words");
+  print("Length: ${words[0]}");
+  return words;
 }
 
 Future<void> addStudent(

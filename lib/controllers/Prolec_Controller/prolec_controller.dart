@@ -1,7 +1,4 @@
 // ignore_for_file: avoid_print, unused_field
-
-import 'dart:ffi';
-
 import 'package:aplicacion/controllers/Prolec_Controller/prolecb_controller.dart';
 import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart';
@@ -42,52 +39,11 @@ class ProlecController extends GetxController {
   SpeechToText speechToText = SpeechToText();
   late StreamController<String> _speechTextStreamController;
   Stream<String> get speechTextStream => _speechTextStreamController.stream;
+  List<String> palabras = [];
 
   late Timer cronometro;
   late User use;
   String name = '';
-  final List<String> palabras = [
-    "globo",
-    "peine",
-    "pueblo",
-    "ciervo",
-    "ermita",
-    "fuego",
-    "gigante",
-    "cuerpo",
-    "girasol",
-    "especie",
-    "flor",
-    "granizo",
-    "ombligo",
-    "trono",
-    "blanco",
-    "alfombra",
-    "pulga",
-    "trompeta",
-    "prensa",
-    "viento",
-    "huelga",
-    "muerto",
-    "lienzo",
-    "cristal",
-    "estrella",
-    "mueble",
-    "princesa",
-    "astuto",
-    "bosque",
-    "sombrero",
-    "tierra",
-    "cloro",
-    "peldaño",
-    "gente",
-    "triunfal",
-    "plato",
-    "tintero",
-    "liebre",
-    "pregunta",
-    "tractor"
-  ];
 
   String? _newVoiceText;
 
@@ -102,10 +58,11 @@ class ProlecController extends GetxController {
   bool get isWeb => kIsWeb;
 
   @override
-  onInit() {
+  onInit() async {
     super.onInit();
     initTts();
     _speechTextStreamController = StreamController<String>.broadcast();
+    palabras = await getPal();
     cargarPalabras();
   }
 
@@ -237,5 +194,11 @@ class ProlecController extends GetxController {
     } else {
       startRecognition();
     }
+  }
+
+  Future<void> mostrar() async {
+    List<String> asdas = await getPal();
+    print("Firebase $asdas");
+    print("De mi flutter $palabras");
   }
 }
