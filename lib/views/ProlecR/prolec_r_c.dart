@@ -8,28 +8,6 @@ import '../../controllers/ProlecR_Controller/prolecrccontroller.dart';
 import '../../models/user.dart';
 
 class ProlecRCPage extends GetView<ProlecRCController> {
-  get context => null;
-
-  void _mostrarAgradecimiento() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('¡Gracias!'),
-          content: Text('Gracias por completar el cuestionario.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cerrar'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     controller.speak();
@@ -146,44 +124,12 @@ class ProlecEight extends GetView<ProlecRCController> {
         usuario, time, puntuacion, puntH, puntO, puntIA, puntIB, puntIC);
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          title: const Text("Sinonimos"),
-        ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.speak();
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: const Center(
-                          child: Icon(
-                            Icons.volume_up,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15)),
-                    Text(
-                      'Instrucciones',
-                      style: GoogleFonts.barlow(fontSize: 20),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
                 SizedBox(
                   height: MediaQuery.of(context).size.height - 100,
                   child: PageView.builder(

@@ -19,8 +19,8 @@ class ProlecbPage extends GetView<ProlecbController> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromRGBO(85, 0, 255, 0.808),
-              Color.fromRGBO(176, 252, 255, 0.808)
+              Color.fromRGBO(157, 192, 255, 1),
+              Color.fromRGBO(205, 255, 216, 1.0)
             ],
           ),
         ),
@@ -61,14 +61,26 @@ class ProlecbPage extends GetView<ProlecbController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
+                      RawMaterialButton(
                         onPressed: () {
                           controller.speak();
                         },
-                        child: const Text('Repetir'),
+                        constraints: const BoxConstraints(
+                          minHeight: 40, // Altura mínima
+                          minWidth: 100, // Ancho mínimo
+                        ),
+                        fillColor: Color.fromARGB(255, 175, 235, 244),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: const Text(
+                          'Repetir',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      const SizedBox(width: 85),
-                      ElevatedButton(
+                      const SizedBox(width: 50),
+                      RawMaterialButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
@@ -77,7 +89,19 @@ class ProlecbPage extends GetView<ProlecbController> {
                                     time: controller.tiempo)),
                           );
                         },
-                        child: const Text('Continuar'),
+                        constraints: const BoxConstraints(
+                          minHeight: 40, // Altura mínima
+                          minWidth: 100, // Ancho mínimo
+                        ),
+                        fillColor: Color.fromARGB(255, 175, 235, 244),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: const Text(
+                          'Continuar',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -106,35 +130,7 @@ class ProlecTwo extends GetView<ProlecbController> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.speak();
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: const Center(
-                          child: Icon(
-                            Icons.volume_up,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15)),
-                    Text(
-                      'Instrucciones del ejercicio',
-                      style: GoogleFonts.barlow(fontSize: 20),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 35)),
                 SingleChildScrollView(
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height - 200,
@@ -149,11 +145,11 @@ class ProlecTwo extends GetView<ProlecbController> {
                           children: [
                             SizedBox(
                               width: 315,
-                              height: 60,
+                              height: 80,
                               child: Text(
                                 Img().imgOption[index].questions!,
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.ysabeau(fontSize: 20),
+                                style: GoogleFonts.ysabeau(fontSize: 30),
                               ),
                             ),
                             const Padding(

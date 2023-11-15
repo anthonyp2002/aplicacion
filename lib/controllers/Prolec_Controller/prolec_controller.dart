@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, unused_field
 
+import 'dart:ffi';
+
 import 'package:aplicacion/controllers/Prolec_Controller/prolecb_controller.dart';
 import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart';
@@ -203,7 +205,6 @@ class ProlecController extends GetxController {
       cronometro.cancel();
       print(obtenerTiempoFormateado());
       print("pase");
-      addPunctuationOne(obtenerTiempoFormateado());
       Get.offAllNamed('/prolecB');
       Get.find<ProlecbController>().datos(use, obtenerTiempoFormateado());
       isLisent = false.obs;
@@ -224,7 +225,6 @@ class ProlecController extends GetxController {
 
   void results() {
     List<String> f = [];
-
     for (String pal in p) {
       if (!words.toLowerCase().contains(pal.toLowerCase())) {
         f.add(pal);

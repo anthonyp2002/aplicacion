@@ -1,6 +1,9 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors
+
+import 'dart:ffi';
 
 import 'package:aplicacion/controllers/Prolec_Controller/prolecb_controller.dart';
+import 'package:aplicacion/services/firebase_service.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,7 +23,7 @@ class ProlecPage extends GetView<ProlecController> {
             end: Alignment.bottomCenter,
             colors: [
               Color.fromRGBO(85, 0, 255, 0.808),
-              Color.fromRGBO(176, 252, 255, 0.808)
+              Color.fromRGBO(176, 221, 255, 0.808)
             ],
           ),
         ),
@@ -61,14 +64,26 @@ class ProlecPage extends GetView<ProlecController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
+                      RawMaterialButton(
                         onPressed: () {
                           controller.speak();
                         },
-                        child: const Text('Repetir'),
+                        constraints: const BoxConstraints(
+                          minHeight: 40, // Altura mínima
+                          minWidth: 100, // Ancho mínimo
+                        ),
+                        fillColor: Color.fromARGB(206, 209, 242, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: const Text(
+                          'Repetir',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      const SizedBox(width: 85),
-                      ElevatedButton(
+                      const SizedBox(width: 50),
+                      RawMaterialButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
@@ -76,7 +91,19 @@ class ProlecPage extends GetView<ProlecController> {
                                     ProlecOne(usuario: controller.use)),
                           );
                         },
-                        child: const Text('Continuar'),
+                        constraints: const BoxConstraints(
+                          minHeight: 40, // Altura mínima
+                          minWidth: 100, // Ancho mínimo
+                        ),
+                        fillColor: const Color.fromARGB(206, 209, 242, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: const Text(
+                          'Continuar',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -108,7 +135,7 @@ class ProlecOne extends GetView<ProlecController> {
             endRadius: 75.0,
             animate: true,
             duration: const Duration(milliseconds: 2000),
-            glowColor: controller.isLisent.value ? Colors.red : Colors.blue,
+            glowColor: controller.isLisent.value ? Colors.blue : Colors.blue,
             repeat: true,
             repeatPauseDuration: const Duration(milliseconds: 100),
             showTwoGlows: true,
@@ -118,7 +145,7 @@ class ProlecOne extends GetView<ProlecController> {
               },
               child: CircleAvatar(
                 backgroundColor:
-                    controller.isLisent.value ? Colors.red : Colors.blue,
+                    controller.isLisent.value ? Colors.blue : Colors.blue,
                 radius: 30,
                 child: Icon(
                     controller.isLisent.value ? Icons.mic : Icons.mic_none,
@@ -127,89 +154,78 @@ class ProlecOne extends GetView<ProlecController> {
             ),
           ),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      controller.speak();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: const BoxDecoration(shape: BoxShape.circle),
-                      child: const Center(
-                        child: Icon(
-                          Icons.volume_up,
-                          color: Colors.black,
-                        ),
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromRGBO(157, 192, 255, 1),
+                Color.fromRGBO(205, 255, 216, 1.0)
+              ],
+            ),
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                const Padding(padding: EdgeInsets.symmetric(vertical: 100)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.timer_outlined,
+                      color: Color.fromARGB(255, 35, 97, 232),
+                      size: 45,
+                    ),
+                    const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
+                    Obx(() => Text(
+                          controller.obtenerTiempoFormateado(),
+                          style: GoogleFonts.barlow(fontSize: 45),
+                        )),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  alignment: Alignment.center,
+                  width: 550,
+                  height: 200,
+                  child: Obx(
+                    () => Center(
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        childAspectRatio: 3,
+                        children: List.generate(
+                            controller.palabrasVisibles.length, (index) {
+                          return Container(
+                            margin: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 68, 137, 255),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                controller.palabrasVisibles[index],
+                                style: const TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                              ),
+                            ),
+                          );
+                        }),
                       ),
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                  Text(
-                    "Instrucciones del ejercicio",
-                    style: GoogleFonts.barlow(fontSize: 20),
-                  ),
-                  const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-              Obx(() => Text(
-                    controller.obtenerTiempoFormateado(),
-                    style: GoogleFonts.barlow(fontSize: 20),
-                  )),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-              Container(
-                padding: const EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: 550,
-                height: 200,
-                child: Obx(
-                  () => Center(
-                    child: GridView.count(
-                      crossAxisCount: 2,
-                      childAspectRatio: 3,
-                      children: List.generate(
-                          controller.palabrasVisibles.length, (index) {
-                        return Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.blueAccent,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Center(
-                            child: Text(
-                              controller.palabrasVisibles[index],
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.white),
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
                 ),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  Get.find<ProlecbController>().datos(controller.use, "00:40");
-                  Get.offAllNamed('/prolecB');
-                },
-                child: const Text("Cambiar "),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                margin: const EdgeInsets.only(bottom: 100),
-                child: Text(controller.words),
-              ),
-            ],
+                MaterialButton(
+                  onPressed: () {
+                    Get.find<ProlecbController>()
+                        .datos(controller.use, "00:41");
+                    Get.offAllNamed('/prolecB');
+                  },
+                  child: const Text("Cambiar "),
+                ),
+              ],
+            ),
           ),
         ),
       );

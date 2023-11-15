@@ -16,7 +16,7 @@ class ImgC {
           "Porque sus padres no le dejaban salir con los amigos",
           "Para ir al cine",
           "Porque sus padres se hiban a enfadar",
-          "Para decirles que no le esperasen"
+          "Para decirles que no le esperar"
         ]),
     OptionsText(
         2,

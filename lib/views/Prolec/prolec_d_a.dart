@@ -16,8 +16,8 @@ class ProlecDAPage extends GetView<ProlecDAController> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromRGBO(85, 0, 255, 0.808),
-              Color.fromRGBO(176, 252, 255, 0.808)
+              Color.fromRGBO(12, 192, 223, 1.0),
+              Color.fromRGBO(255, 222, 89, 0)
             ],
           ),
         ),
@@ -58,14 +58,26 @@ class ProlecDAPage extends GetView<ProlecDAController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
+                      RawMaterialButton(
                         onPressed: () {
                           controller.speak();
                         },
-                        child: const Text('Repetir'),
+                        constraints: const BoxConstraints(
+                          minHeight: 40, // Altura mínima
+                          minWidth: 100, // Ancho mínimo
+                        ),
+                        fillColor: Color.fromARGB(206, 209, 242, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: const Text(
+                          'Repetir',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      const SizedBox(width: 85),
-                      ElevatedButton(
+                      const SizedBox(width: 50),
+                      RawMaterialButton(
                         onPressed: () {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
@@ -76,7 +88,19 @@ class ProlecDAPage extends GetView<ProlecDAController> {
                                     puntosH: controller.puntosH)),
                           );
                         },
-                        child: const Text('Continuar'),
+                        constraints: const BoxConstraints(
+                          minHeight: 40, // Altura mínima
+                          minWidth: 100, // Ancho mínimo
+                        ),
+                        fillColor: Color.fromARGB(206, 209, 242, 255),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        child: const Text(
+                          'Continuar',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -108,45 +132,12 @@ class ProlecFour extends GetView<ProlecDAController> {
     controller.datos(usuario, time, puntos, puntosH);
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          title: const Text("Prolec"),
-        ),
         body: ListView(
           children: [
+            const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.speak();
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: const Center(
-                          child: Icon(
-                            Icons.volume_up,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10)),
-                    Text(
-                      "Instrucciones del ejercicio",
-                      style: GoogleFonts.barlow(fontSize: 20),
-                    ),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
                 SizedBox(
                   height: MediaQuery.of(context).size.height - 300,
                   child: PageView.builder(
@@ -197,11 +188,14 @@ class ProlecFour extends GetView<ProlecDAController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            "Da tres toques sobre el cuadrado dibujado",
-            style: GoogleFonts.barlow(fontSize: 25),
+          SizedBox(
+            width: 250,
+            height: 200,
+            child: Text(
+              "Da tres toques sobre el cuadrado dibujado",
+              style: GoogleFonts.barlow(fontSize: 25),
+            ),
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
           Container(
             width: 200,
             height: 200,

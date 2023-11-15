@@ -66,6 +66,13 @@ class ProlecCController extends GetxController {
     update();
   }
 
+  List<Color> backgroundColors = [
+    Colors.amber,
+    Colors.blue,
+    Colors.green,
+    // Agrega más colores según sea necesario
+  ];
+
   initTts() {
     flutterTts = FlutterTts();
     flutterTts.setStartHandler(() {

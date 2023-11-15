@@ -1,3 +1,5 @@
+import "dart:ffi";
+
 import "package:cloud_firestore/cloud_firestore.dart";
 
 FirebaseFirestore db = FirebaseFirestore.instance;
@@ -35,6 +37,10 @@ Future<void> addPunctuationTwo(String pnt) async {
 
 Future<void> addPunctuationThree(String pntH) async {
   await db.collection("ExerciseTwo").add({"scoreHistory": pntH});
+}
+
+Future<void> addPalabras(List palabras) async {
+  await db.collection("Words").add({"word": palabras});
 }
 
 Future<void> addPunctuations(String nameUse, String time, int pnt, int pntH,

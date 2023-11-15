@@ -151,12 +151,15 @@ class LoginStudentPage extends GetView<RegisterController> {
                 const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                 RawMaterialButton(
                   onPressed: () {
-                    //  Get.offAllNamed('/prolec');
                     controller.login();
                   },
-                  fillColor: Colors.blue.shade600,
+                  constraints: BoxConstraints(
+                    minHeight: 40, // Altura mínima
+                    minWidth: 100, // Ancho mínimo
+                  ),
+                  fillColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(13),
                   ),
                   child: const Text(
                     'Registrarse',

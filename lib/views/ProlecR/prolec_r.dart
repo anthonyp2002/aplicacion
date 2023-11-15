@@ -114,44 +114,12 @@ class ProlecFive extends GetView<ProlecRController> {
     controller.datos(usuario, time, puntuacion, puntH, puntO);
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          title: const Text("Seudopalabras"),
-        ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.speak();
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: const Center(
-                          child: Icon(
-                            Icons.volume_up,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15)),
-                    Text(
-                      'Instrucciones',
-                      style: GoogleFonts.barlow(fontSize: 20),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
                 SizedBox(
                   height: MediaQuery.of(context).size.height - 100,
                   child: PageView.builder(

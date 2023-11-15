@@ -39,34 +39,7 @@ class _CameraScreenState extends State<ProlecDBPage> {
         title: const Text("Prolec"),
       ),
       body: Column(children: [
-        const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                _cameraController.speak();
-              },
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: const BoxDecoration(shape: BoxShape.circle),
-                child: const Center(
-                  child: Icon(
-                    Icons.volume_up,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
-            Text(
-              "Instrucciones del ejercicio",
-              style: GoogleFonts.barlow(fontSize: 20),
-            ),
-            const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-          ],
-        ),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 40)),
         const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
         SizedBox(
           height: 70,

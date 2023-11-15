@@ -120,43 +120,12 @@ class ProlecSeven extends GetView<ProlecRBController> {
     controller.datos(usuario, time, puntuacion, puntH, puntO, puntIA, puntIB);
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 80,
-          title: const Text("Ortografía"),
-        ),
         body: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.speak();
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        child: const Center(
-                          child: Icon(
-                            Icons.volume_up,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15)),
-                    Text(
-                      'Instrucciones',
-                      style: GoogleFonts.barlow(fontSize: 20),
-                    ),
-                  ],
-                ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
                 MaterialButton(
                   onPressed: () {
                     Get.offAllNamed('/prolecRC');
@@ -201,7 +170,7 @@ class ProlecSeven extends GetView<ProlecRBController> {
                                         child: Text(
                                           palabras.key,
                                           style: const TextStyle(
-                                              fontSize: 25,
+                                              fontSize: 18,
                                               color: Colors.white),
                                         ),
                                       ),
