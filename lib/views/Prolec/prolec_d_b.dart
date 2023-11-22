@@ -20,7 +20,6 @@ class _CameraScreenState extends State<ProlecDBPage> {
     _cameraController.pageController = PageController(initialPage: 0);
     _cameraController.initializeCamera();
     _cameraController.loadModel();
-    _cameraController.initTts();
   }
 
   @override
@@ -34,10 +33,6 @@ class _CameraScreenState extends State<ProlecDBPage> {
     _cameraController.loadModel();
     _cameraController.pageController = PageController(initialPage: 0);
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 70,
-        title: const Text("Prolec"),
-      ),
       body: Column(children: [
         const Padding(padding: EdgeInsets.symmetric(vertical: 40)),
         const Padding(padding: EdgeInsets.symmetric(vertical: 2)),
@@ -54,6 +49,7 @@ class _CameraScreenState extends State<ProlecDBPage> {
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
+                          textAlign: TextAlign.center,
                           Instruc().optionsText[index].text!,
                           style: GoogleFonts.barlow(fontSize: 20),
                         ),

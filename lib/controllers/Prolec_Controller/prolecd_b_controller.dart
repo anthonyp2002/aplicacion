@@ -1,45 +1,20 @@
 // ignore_for_file: avoid_print, override_on_non_overriding_member
 import 'dart:async';
-import 'dart:io';
 import 'package:aplicacion/controllers/ProlecR_Controller/prolecrcontroller.dart';
-import 'package:flutter/foundation.dart';
+import 'package:aplicacion/controllers/initController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import 'package:camera/camera.dart';
-import 'package:speech_to_text/speech_to_text.dart';
-
 import '../../api/instrucciones.dart';
 import '../../models/user.dart';
 
 class ProlecDBController extends GetxController {
-  late FlutterTts flutterTts;
-  String? language;
-  String? enunciado = "Realize lo que diga las siguientes acciones";
-  String? engine;
-  double volume = 0.5;
   String valueAnte = "";
-  bool showCollisionMessage = false;
-  double pitch = 1.0;
   int mb = 0;
   int mc = 0;
-  double rate = 0.5;
-  bool isCurrentLanguageInstalled = false;
   late PageController pageController;
   bool shouldRunValidation = true;
-  int tap = 0;
-  String? speed = "Di la palabra";
-  SpeechToText speechToText = SpeechToText();
-  late Timer cronometro;
-  int tapCounter = 0;
-  TtsState ttsState = TtsState.stopped;
-  String? _newVoiceText;
-  get isPlaying => ttsState == TtsState.playing;
-  bool get isIOS => !kIsWeb && Platform.isIOS;
-  bool get isAndroid => !kIsWeb && Platform.isAndroid;
-  bool get isWindows => !kIsWeb && Platform.isWindows;
-  bool get isWeb => kIsWeb;
   RxBool isCameraOn = false.obs;
   CameraController? _cameraController;
   CameraController? get cameraController => _cameraController;
@@ -52,23 +27,11 @@ class ProlecDBController extends GetxController {
   int puntos = 0;
   int puntosH = 0;
   int puntosO = 0;
-  bool isTransitioningPage = false;
 
   @override
   void initState() {
     initState();
-    initTts();
     loadModel();
-  }
-
-  initTts() {
-    flutterTts = FlutterTts();
-    flutterTts.setStartHandler(() {
-      ttsState = TtsState.playing;
-    });
-    flutterTts.setCompletionHandler(() {
-      ttsState = TtsState.stopped;
-    });
   }
 
   void datos(User a, String tmp, int ptn, int pntH, int pntO) {
@@ -78,16 +41,6 @@ class ProlecDBController extends GetxController {
     puntosH = pntH;
     puntosO = pntO;
     update();
-  }
-
-  Future speak() async {
-    flutterTts.setLanguage("es-ES");
-    _newVoiceText = enunciado;
-    if (_newVoiceText != null) {
-      if (_newVoiceText!.isNotEmpty) {
-        await flutterTts.speak(_newVoiceText!);
-      }
-    }
   }
 
   Future<void> initializeCamera() async {
@@ -160,8 +113,8 @@ class ProlecDBController extends GetxController {
           print(puntosO);
           await Future.delayed(const Duration(seconds: 1), () {
             Get.offAllNamed('/prolecR');
-            Get.find<ProlecRController>()
-                .datos(use, tiempo, puntos, puntosH, puntosO);
+            Get.find<InitController>()
+                .datos(use, tiempo, puntos, puntosH, puntosO, 0, 0, 0, 0);
           });
         }
       }
@@ -191,14 +144,13 @@ class ProlecDBController extends GetxController {
   void onClose() {
     _cameraController?.dispose();
     super.onClose();
-    flutterTts.stop();
   }
 
   void nextQuestions() {
     if (pageController.positions.isNotEmpty) {
       if (pageController.page == Instruc().optionsText.length - 1) {
         Get.offAllNamed('/prolec');
-        print("Pse");
+        print("Pase");
       } else {
         pageController.nextPage(
             duration: const Duration(milliseconds: 500), curve: Curves.linear);

@@ -1,9 +1,5 @@
 // ignore_for_file: must_be_immutable, use_key_in_widget_constructors
-
-import 'dart:ffi';
-
-import 'package:aplicacion/controllers/Prolec_Controller/prolecb_controller.dart';
-import 'package:aplicacion/services/firebase_service.dart';
+import 'package:aplicacion/controllers/initController.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,9 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/Prolec_Controller/prolec_controller.dart';
 import '../../models/user.dart';
 
-class ProlecPage extends GetView<ProlecController> {
+class ProlecPage extends GetView<InitController> {
   @override
   Widget build(BuildContext context) {
+    controller.enunciado =
+        "Lea en voz alta las palabras que aparezcan en la pantalla";
     controller.speak();
     return Scaffold(
       body: Container(
@@ -48,7 +46,7 @@ class ProlecPage extends GetView<ProlecController> {
                         return Text(snapshot.data!,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.ysabeau(
-                                fontSize: 32, color: Colors.black));
+                                fontSize: 30, color: Colors.black));
                       } else {
                         return const Text(
                           '',
@@ -72,7 +70,7 @@ class ProlecPage extends GetView<ProlecController> {
                           minHeight: 40, // Altura mínima
                           minWidth: 100, // Ancho mínimo
                         ),
-                        fillColor: Color.fromARGB(206, 209, 242, 255),
+                        fillColor: const Color.fromARGB(206, 209, 242, 255),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13),
                         ),
@@ -200,7 +198,7 @@ class ProlecOne extends GetView<ProlecController> {
                           return Container(
                             margin: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 68, 137, 255),
+                              color: const Color.fromARGB(255, 68, 137, 255),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Center(
@@ -218,9 +216,10 @@ class ProlecOne extends GetView<ProlecController> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Get.find<ProlecbController>()
-                        .datos(controller.use, "00:41");
+                    Get.put(InitController());
                     Get.offAllNamed('/prolecB');
+                    Get.find<InitController>()
+                        .datos(controller.use, "00:41", 0, 0, 0, 0, 0, 0, 0);
                   },
                   child: const Text("Cambiar "),
                 ),

@@ -1,114 +1,54 @@
-// ignore_for_file: avoid_print
-
-import 'package:aplicacion/controllers/Prolec_Controller/prolecc_controller.dart';
+// ignore_for_file: avoid_print, unnecessary_overrides
+import 'package:aplicacion/controllers/initController.dart';
 import 'package:aplicacion/models/prolecb_model.dart';
 import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import "package:get/get.dart";
-import 'package:flutter_tts/flutter_tts.dart';
-import 'dart:async';
-import 'dart:io' show Platform;
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:speech_to_text/speech_to_text.dart';
 import '../../models/user.dart';
 
-enum TtsState { playing, stopped }
-
 class ProlecbController extends GetxController {
-  late FlutterTts flutterTts;
-  String? language;
-  String? enunciado = "Presione la imagen que coincida con el enunciado";
-  String? engine;
-  double volume = 0.5;
-  double pitch = 1.0;
-  double rate = 0.5;
-  String? _newVoiceText;
   int puntuacion = 0;
   late PageController pageController;
-  List<dynamic> resultsOption = [];
-  // ignore: unused_field
-  bool _isPressed = false;
-  TtsState ttsState = TtsState.stopped;
-
-  Color isTrue = Colors.green;
-  Color isWrong = Colors.red;
-  bool get isIOS => !kIsWeb && Platform.isIOS;
-  bool get isAndroid => !kIsWeb && Platform.isAndroid;
-  bool get isWindows => !kIsWeb && Platform.isWindows;
-  bool get isWeb => kIsWeb;
+  Map<String, String> badResult = {};
+  Map<String, String> goodResult = {};
+  String numImg = "";
   late User use;
   String tiempo = '';
-  SpeechToText speechToText = SpeechToText();
-  late StreamController<String> _speechTextStreamController;
-  Stream<String> get speechTextStream => _speechTextStreamController.stream;
-  // ignore: unused_field
-  late Timer _textDisplayTimer;
-  var showButtons = false.obs;
   List<OptionsModel> imgOption = [];
 
   @override
   onInit() async {
-    pageController = PageController(initialPage: 0);
     super.onInit();
-    initTts();
-    _speechTextStreamController = StreamController<String>.broadcast();
-    imgOption = await getImg();
+    pageController = PageController(initialPage: 0);
   }
 
-  initTts() {
-    flutterTts = FlutterTts();
-
-    flutterTts.setStartHandler(() {
-      ttsState = TtsState.playing;
-    });
-
-    flutterTts.setCompletionHandler(() {
-      ttsState = TtsState.stopped;
-    });
-  }
-
-  Future speak() async {
-    await Future.delayed(const Duration(seconds: 1));
-    flutterTts.setLanguage("es-ES");
-    _newVoiceText = enunciado;
-    if (_newVoiceText != null && _newVoiceText!.isNotEmpty) {
-      await flutterTts.speak(_newVoiceText!);
-      List<String> words = _newVoiceText!.split(' ');
-      const fragmentDisplayInterval = 225;
-      int currentIndex = 0;
-      _textDisplayTimer = Timer.periodic(
-        const Duration(milliseconds: fragmentDisplayInterval),
-        (timer) {
-          if (currentIndex < words.length) {
-            String fragmentToShow =
-                words.sublist(0, currentIndex + 1).join(' ');
-            _speechTextStreamController.sink.add(fragmentToShow);
-            currentIndex++;
-          } else {
-            timer.cancel();
-          }
-        },
-      );
-      flutterTts.setCompletionHandler(() {
-        _speechTextStreamController.sink.add(_newVoiceText!);
-        showButtons.value = true;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    flutterTts.stop();
-    _speechTextStreamController.close();
-  }
-
-  void results(bool result) {
-    resultsOption.add(result);
-    print(resultsOption);
+  void results(bool result, String frase, String num) {
+    numImg = identificarImagen(num);
     if (result == true) {
       puntuacion++;
+      goodResult[frase] = "Número Img: $numImg";
+      print(goodResult);
+      print(puntuacion);
+    } else {
+      badResult[frase] = "Número Img: $numImg";
+      print(puntuacion);
+      print(badResult);
     }
+  }
+
+  String identificarImagen(String nombreImagen) {
+    final terminaciones = {
+      "1.png": "1",
+      "2.png": "2",
+      "3.png": "3",
+      "4.png": "4",
+    };
+    for (final entry in terminaciones.entries) {
+      if (nombreImagen.endsWith(entry.key)) {
+        return entry.value;
+      }
+    }
+    return "No identificado";
   }
 
   void datos(User a, String crono) {
@@ -122,15 +62,21 @@ class ProlecbController extends GetxController {
       if (pageController.page == imgOption.length - 1) {
         print(puntuacion);
         Get.offAllNamed('/prolecC');
-        Get.find<ProlecCController>().datos(use, tiempo, puntuacion);
-        // GuardarExcel().puntuacionImg(puntuacion);
+        Get.find<InitController>()
+            .datos(use, tiempo, puntuacion, 0, 0, 0, 0, 0, 0);
+        addInformeImg(badResult, "ERRORES");
+        addInformeImg(goodResult, "Aciertos");
       } else {
-        _isPressed = false;
         pageController.nextPage(
             duration: const Duration(milliseconds: 500), curve: Curves.linear);
         print(use.fullname);
         print(tiempo);
       }
     }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

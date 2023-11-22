@@ -1,16 +1,20 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors
 
+import 'package:aplicacion/controllers/initController.dart';
+import 'package:aplicacion/models/orto.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../api/ortografia.dart';
 import '../../controllers/ProlecR_Controller/prolecrbcontroller.dart';
 import '../../models/user.dart';
 
-class ProlecRBPage extends GetView<ProlecRBController> {
+class ProlecRBPage extends GetView<InitController> {
   @override
   Widget build(BuildContext context) {
+    controller.enunciado =
+        'Presiona la palabra que esta escrita correctamente.';
     controller.speak();
+    controller.recuperarOrto();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -72,13 +76,15 @@ class ProlecRBPage extends GetView<ProlecRBController> {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                                 builder: (context) => ProlecSeven(
-                                    usuario: controller.use,
-                                    time: controller.tiempo,
-                                    puntuacion: controller.puntos,
-                                    puntH: controller.puntosH,
-                                    puntO: controller.puntosO,
-                                    puntIA: controller.puntosIA,
-                                    puntIB: controller.puntosIB)),
+                                      usuario: controller.use,
+                                      time: controller.tiempo,
+                                      puntuacion: controller.puntos,
+                                      puntH: controller.puntosH,
+                                      puntO: controller.puntosO,
+                                      puntIA: controller.puntosIA,
+                                      puntIB: controller.puntosIB,
+                                      ort: controller.ortografia,
+                                    )),
                           );
                         },
                         child: const Text('Continuar'),
@@ -103,6 +109,8 @@ class ProlecSeven extends GetView<ProlecRBController> {
   int puntO;
   int puntIA;
   int puntIB;
+  List<OrtModel> ort = [];
+
   ProlecSeven(
       {Key? key,
       required this.usuario,
@@ -111,13 +119,15 @@ class ProlecSeven extends GetView<ProlecRBController> {
       required this.puntH,
       required this.puntO,
       required this.puntIA,
-      required this.puntIB})
+      required this.puntIB,
+      required this.ort})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Get.put(ProlecRBController());
     controller.datos(usuario, time, puntuacion, puntH, puntO, puntIA, puntIB);
+    controller.seuModel = ort;
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
         body: SingleChildScrollView(
@@ -138,7 +148,7 @@ class ProlecSeven extends GetView<ProlecRBController> {
                   child: PageView.builder(
                     controller: controller.pageController,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: OrotModel().seuModel.length,
+                    itemCount: controller.seuModel.length,
                     itemBuilder: (context, index) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -150,14 +160,13 @@ class ProlecSeven extends GetView<ProlecRBController> {
                             child: GridView.count(
                               crossAxisCount: 2,
                               childAspectRatio: 3,
-                              children: OrotModel()
-                                  .seuModel[index]
-                                  .answer
-                                  .entries
+                              children: controller
+                                  .seuModel[index].answer.entries
                                   .map((palabras) {
                                 return GestureDetector(
                                     onTap: () {
-                                      controller.results(palabras.value);
+                                      controller.results(
+                                          palabras.value, palabras.key);
                                       controller.nextQuestions();
                                     },
                                     child: Container(

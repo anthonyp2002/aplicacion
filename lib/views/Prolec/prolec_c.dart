@@ -1,24 +1,22 @@
-// ignore_for_file: avoid_print, must_be_immutable
-
+// ignore_for_file: avoid_print, must_be_immutable, use_key_in_widget_constructors
+import 'package:aplicacion/controllers/initController.dart';
+import 'package:aplicacion/models/prolcec_model.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'dart:io' show Platform;
 import 'package:google_fonts/google_fonts.dart';
-import '../../../api/data_imgc.dart';
-import 'package:flutter_tts/flutter_tts.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../controllers/Prolec_Controller/prolecc_controller.dart';
 import '../../models/user.dart';
-import 'package:aplicacion/controllers/Prolec_Controller/prolecd_a_controller.dart';
 
-bool _isPressed = false;
-
-class ProlecCPage extends GetView<ProlecCController> {
+class ProlecCPage extends GetView<InitController> {
   @override
   Widget build(BuildContext context) {
+    controller.enunciado =
+        "Lea las historias y responda las siguientes preguntas";
     controller.speak();
+    controller.recuperarDatosText();
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -95,6 +93,7 @@ class ProlecCPage extends GetView<ProlecCController> {
                                       usuario: controller.use,
                                       time: controller.tiempo,
                                       puntuacion: controller.puntos,
+                                      optionsTex: controller.optionsText,
                                     )),
                           );
                         },
@@ -128,141 +127,132 @@ class ProlecThree extends GetView<ProlecCController> {
   User usuario;
   String time;
   int puntuacion;
+  List<OptionsText> optionsTex = [];
   ProlecThree(
       {Key? key,
       required this.usuario,
       required this.time,
-      required this.puntuacion})
+      required this.puntuacion,
+      required this.optionsTex})
       : super(key: key);
-  List<dynamic> resultsOption = [];
-  List<dynamic> result = [];
-  late FlutterTts flutterTts;
   late PageController pageController;
-  String? language;
-  String? engine;
-  double volume = 0.5;
-  double pitch = 1.0;
-  double rate = 0.5;
   String speed = " ";
   var isLisent = false.obs;
-
-  //TtsState ttsState = TtsState.stopped;
   SpeechToText speechToText = SpeechToText();
-
-  bool get isIOS => !kIsWeb && Platform.isIOS;
-  bool get isAndroid => !kIsWeb && Platform.isAndroid;
-  bool get isWindows => !kIsWeb && Platform.isWindows;
-  bool get isWeb => kIsWeb;
-
-  bool get isPressed => _isPressed;
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ProlecCController());
     controller.datos(usuario, time, puntuacion);
+    controller.optionsText = optionsTex;
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
         body: SingleChildScrollView(
-          child: Container(
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height -
-                        100, // Establecer una altura explícita
-                    child: PageView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      controller: controller.pageController,
-                      itemCount: ImgC().optionsText.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                child: Container(
-                              margin: const EdgeInsets.all(10),
-                              child: SizedBox(
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      ImgC().optionsText[index].titulo!,
-                                      style: GoogleFonts.barlow(fontSize: 20),
-                                    ),
-                                    const Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 20)),
-                                    Expanded(
-                                      child: SizedBox(
-                                        width: 300,
-                                        height: 100,
-                                        child: SingleChildScrollView(
-                                          child: Text(
-                                            ImgC().optionsText[index].text!,
-                                            style: GoogleFonts.barlow(
-                                                fontSize: 20),
-                                            textAlign: TextAlign.justify,
-                                          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height -
+                      100, // Establecer una altura explícita
+                  child: PageView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: controller.pageController,
+                    itemCount: controller.optionsText.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                              child: Container(
+                            margin: const EdgeInsets.all(10),
+                            child: SizedBox(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    controller.optionsText[index].titulo!,
+                                    style: GoogleFonts.barlow(fontSize: 20),
+                                  ),
+                                  const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 20)),
+                                  Expanded(
+                                    child: SizedBox(
+                                      width: 300,
+                                      height: 100,
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                          controller.optionsText[index].text!,
+                                          style:
+                                              GoogleFonts.barlow(fontSize: 20),
+                                          textAlign: TextAlign.justify,
                                         ),
                                       ),
                                     ),
-                                    const Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 10)),
-                                    RawMaterialButton(
-                                      onPressed: () {
-                                        List<String> preguntas =
-                                            ImgC().optionsText[index].questions;
-                                        List<String> answers =
-                                            ImgC().optionsText[index].answer;
-                                        mostrarPreguntas(
-                                            context, preguntas, answers);
-                                        controller.changeVariableValue();
-                                        mostrarPreguntas(
-                                            context, preguntas, answers);
-                                        controller.changeVariableValue();
-                                      },
-                                      constraints: const BoxConstraints(
-                                        minHeight: 40,
-                                        minWidth: 150,
-                                      ),
-                                      fillColor:
-                                          Color.fromARGB(255, 58, 133, 238),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(13),
-                                      ),
-                                      child: const Text(
-                                        'Ver Preguntas',
-                                        style: TextStyle(
-                                            fontSize: 15.0,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.white),
-                                      ),
+                                  ),
+                                  const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10)),
+                                  RawMaterialButton(
+                                    onPressed: () {
+                                      List<String> preguntas = controller
+                                          .optionsText[index].questions;
+                                      List<String> answers =
+                                          controller.optionsText[index].answer;
+                                      mostrarPreguntas(
+                                          context, preguntas, answers);
+                                      controller.changeVariableValue();
+                                      mostrarPreguntas(
+                                          context, preguntas, answers);
+                                      controller.changeVariableValue();
+                                      controller.tit = controller
+                                          .optionsText[index].titulo
+                                          .toString();
+                                    },
+                                    constraints: const BoxConstraints(
+                                      minHeight: 40,
+                                      minWidth: 150,
                                     ),
-                                    MaterialButton(
-                                      onPressed: () {
-                                        Get.offAllNamed('/prolecD_A');
-                                        Get.find<ProlecDAController>().datos(
-                                            controller.use,
-                                            controller.tiempo,
-                                            controller.puntos,
-                                            6);
-                                      },
-                                      child: const Text("Cambiar "),
-                                    )
-                                  ],
-                                ),
+                                    fillColor:
+                                        const Color.fromARGB(255, 58, 133, 238),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(13),
+                                    ),
+                                    child: const Text(
+                                      'Ver Preguntas',
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                  MaterialButton(
+                                    onPressed: () {
+                                      Get.offAllNamed('/prolecD_A');
+                                      Get.find<InitController>().datos(
+                                          controller.use,
+                                          controller.tiempo,
+                                          controller.puntos,
+                                          6,
+                                          0,
+                                          0,
+                                          0,
+                                          0,
+                                          0);
+                                    },
+                                    child: const Text("Cambiar "),
+                                  )
+                                ],
                               ),
-                            )),
-                          ],
-                        );
-                      },
-                    ),
+                            ),
+                          )),
+                        ],
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -278,6 +268,7 @@ class ProlecThree extends GetView<ProlecCController> {
     int index = 0;
     List<String> respuestas = [];
     bool bloqueado = true;
+    print("Estoy en index $index  con las $preguntas");
     void mostrarSiguientePregunta() {
       showDialog(
         context: context,
@@ -343,15 +334,18 @@ class ProlecThree extends GetView<ProlecCController> {
                     mostrarSiguientePregunta();
                     print(speed);
                     print(answers[index - 1]);
-                    controller.puntuacion(speed, answers[index - 1]);
+                    controller.puntuacion(
+                        preguntas[index - 1], speed, answers[index - 1]);
                     speed = "";
                     controller.changeVariableValue();
                   } else {
                     false;
                     print(speed);
                     print(answers[index - 1]);
-                    controller.puntuacion(speed, answers[index - 1]);
+                    controller.puntuacion(
+                        preguntas[index - 1], speed, answers[index - 1]);
                     speed = "";
+                    Navigator.of(context).pop();
                     controller.nextQuestions();
                   }
                 },

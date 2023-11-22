@@ -1,6 +1,5 @@
-// ignore: unused_import
-import 'package:aplicacion/controllers/Prolec_Controller/prolec_controller.dart';
-import 'package:aplicacion/controllers/Prolec_Controller/prolecd_a_controller.dart';
+// ignore: unusort
+import 'package:aplicacion/controllers/initController.dart';
 import 'package:aplicacion/services/firebase_service.dart';
 //import 'package:aplicacion/controllers/guardarexcel.dart';
 import 'package:flutter/material.dart';
@@ -95,9 +94,7 @@ class RegisterController extends GetxController {
       print(a.anioLec);
       addStudent(a.fullname, a.age, a.anioLec, a.password);
       Get.offAllNamed('/prolec');
-      Get.find<ProlecController>().datos(a);
-      // Get.offAllNamed('/prolecD_A');
-      // Get.find<ProlecDAController>().datos(a, "00:40", 12, 4);
+      Get.find<InitController>().datos(a, "", 0, 0, 0, 0, 0, 0, 0);
     } else {
       Get.snackbar('Error', 'Verifique los campos');
     }

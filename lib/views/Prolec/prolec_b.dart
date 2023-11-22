@@ -1,16 +1,20 @@
 // ignore_for_file: must_be_immutable, use_key_in_widget_constructors
 
-import 'package:aplicacion/controllers/Prolec_Controller/prolecc_controller.dart';
+import 'package:aplicacion/controllers/initController.dart';
+import 'package:aplicacion/models/prolecb_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../controllers/Prolec_Controller/prolecb_controller.dart';
 import '../../models/user.dart';
 
-class ProlecbPage extends GetView<ProlecbController> {
+class ProlecbPage extends GetView<InitController> {
   @override
   Widget build(BuildContext context) {
+    Get.put(InitController());
+    controller.enunciado = "Presione la imagen que coincida con el enunciado";
     controller.speak();
+    controller.recuperarDatosImg();
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -68,7 +72,7 @@ class ProlecbPage extends GetView<ProlecbController> {
                           minHeight: 40, // Altura mínima
                           minWidth: 100, // Ancho mínimo
                         ),
-                        fillColor: Color.fromARGB(255, 175, 235, 244),
+                        fillColor: const Color.fromARGB(255, 175, 235, 244),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13),
                         ),
@@ -84,15 +88,17 @@ class ProlecbPage extends GetView<ProlecbController> {
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
                                 builder: (context) => ProlecTwo(
-                                    usuario: controller.use,
-                                    time: controller.tiempo)),
+                                      usuario: controller.use,
+                                      time: controller.tiempo,
+                                      imgOptn: controller.imgOption,
+                                    )),
                           );
                         },
                         constraints: const BoxConstraints(
                           minHeight: 40, // Altura mínima
                           minWidth: 100, // Ancho mínimo
                         ),
-                        fillColor: Color.fromARGB(255, 175, 235, 244),
+                        fillColor: const Color.fromARGB(255, 175, 235, 244),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(13),
                         ),
@@ -117,12 +123,19 @@ class ProlecbPage extends GetView<ProlecbController> {
 class ProlecTwo extends GetView<ProlecbController> {
   User usuario;
   String time;
-  ProlecTwo({Key? key, required this.usuario, required this.time})
+  List<OptionsModel> imgOptn = [];
+  ProlecTwo(
+      {Key? key,
+      required this.usuario,
+      required this.time,
+      required this.imgOptn})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Get.put(ProlecbController());
     controller.datos(usuario, time);
+    controller.imgOption = imgOptn;
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
         body: Center(
@@ -163,7 +176,11 @@ class ProlecTwo extends GetView<ProlecbController> {
                                     .map((image) {
                                   return GestureDetector(
                                     onTap: () {
-                                      controller.results(image.value);
+                                      controller.results(
+                                        image.value,
+                                        controller.imgOption[index].questions!,
+                                        image.key,
+                                      );
                                       controller.nextQuestions();
                                     },
                                     child: Container(
@@ -185,8 +202,8 @@ class ProlecTwo extends GetView<ProlecbController> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Get.find<ProlecCController>()
-                        .datos(controller.use, controller.tiempo, 8);
+                    Get.find<InitController>().datos(
+                        controller.use, controller.tiempo, 8, 0, 0, 0, 0, 0, 0);
                     Get.offAllNamed('/prolecC');
                   },
                   child: const Text("Cambiar "),

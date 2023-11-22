@@ -1,16 +1,20 @@
 // ignore_for_file: must_be_immutable, use_key_in_widget_constructors
 
+import 'package:aplicacion/controllers/initController.dart';
+import 'package:aplicacion/models/seudo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../api/sinonimos.dart';
 import '../../controllers/ProlecR_Controller/prolecrccontroller.dart';
 import '../../models/user.dart';
 
-class ProlecRCPage extends GetView<ProlecRCController> {
+class ProlecRCPage extends GetView<InitController> {
   @override
   Widget build(BuildContext context) {
+    controller.enunciado =
+        'Presione la palabra que signifique lo mismo que la palabra mostrada.';
     controller.speak();
+    controller.recuperarPal("Sinonimos");
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -79,7 +83,8 @@ class ProlecRCPage extends GetView<ProlecRCController> {
                                     puntO: controller.puntosO,
                                     puntIA: controller.puntosIA,
                                     puntIB: controller.puntosIB,
-                                    puntIC: controller.puntosIC)),
+                                    puntIC: controller.puntosIC,
+                                    sino: controller.seuModel)),
                           );
                         },
                         child: const Text('Continuar'),
@@ -105,6 +110,7 @@ class ProlecEight extends GetView<ProlecRCController> {
   int puntIA;
   int puntIB;
   int puntIC;
+  List<SeudoModel> sino = [];
   ProlecEight(
       {Key? key,
       required this.usuario,
@@ -114,7 +120,8 @@ class ProlecEight extends GetView<ProlecRCController> {
       required this.puntO,
       required this.puntIA,
       required this.puntIB,
-      required this.puntIC})
+      required this.puntIC,
+      required this.sino})
       : super(key: key);
 
   @override
@@ -122,6 +129,7 @@ class ProlecEight extends GetView<ProlecRCController> {
     Get.put(ProlecRCController());
     controller.datos(
         usuario, time, puntuacion, puntH, puntO, puntIA, puntIB, puntIC);
+    controller.seuModel = sino;
     return StatefulBuilder(builder: (context, setState) {
       return Scaffold(
         body: SingleChildScrollView(
@@ -135,14 +143,14 @@ class ProlecEight extends GetView<ProlecRCController> {
                   child: PageView.builder(
                     controller: controller.pageController,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: SinoModel().seuModel.length,
+                    itemCount: controller.seuModel.length,
                     itemBuilder: (context, index) {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            SinoModel().seuModel[index].palabras!,
+                            controller.seuModel[index].palabras!,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.barlow(fontSize: 30),
                           ),
@@ -154,14 +162,13 @@ class ProlecEight extends GetView<ProlecRCController> {
                             child: GridView.count(
                               crossAxisCount: 2,
                               childAspectRatio: 3,
-                              children: SinoModel()
-                                  .seuModel[index]
-                                  .answer
-                                  .entries
+                              children: controller
+                                  .seuModel[index].answer.entries
                                   .map((palabras) {
                                 return GestureDetector(
                                     onTap: () {
-                                      controller.results(palabras.value);
+                                      controller.results(
+                                          palabras.value, palabras.key);
                                       controller.nextQuestions();
                                     },
                                     child: Container(
