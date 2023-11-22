@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print, override_on_non_overriding_member
 import 'dart:async';
-import 'package:aplicacion/controllers/ProlecR_Controller/prolecrcontroller.dart';
 import 'package:aplicacion/controllers/initController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tflite/flutter_tflite.dart';
