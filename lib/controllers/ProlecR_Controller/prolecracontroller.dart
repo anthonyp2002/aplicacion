@@ -1,4 +1,3 @@
-import 'package:aplicacion/controllers/ProlecR_Controller/prolecrbcontroller.dart';
 import 'package:aplicacion/controllers/initController.dart';
 import 'package:aplicacion/models/seudo.dart';
 import 'package:aplicacion/services/firebase_service.dart';
