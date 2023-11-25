@@ -4,12 +4,14 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:line_icons/line_icons.dart';
 import '../../controllers/Prolec_Controller/prolec_controller.dart';
 import '../../models/user.dart';
 
 class ProlecPage extends GetView<InitController> {
   @override
   Widget build(BuildContext context) {
+    Get.put(InitController());
     controller.enunciado =
         "Lea en voz alta las palabras que aparezcan en la pantalla";
     controller.speak();
@@ -120,6 +122,8 @@ class ProlecOne extends GetView<ProlecController> {
   ProlecOne({Key? key, required this.usuario}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Get.put(InitController());
+
     Get.put(ProlecController());
     controller.startRecognition();
     controller.iniciarCronometro();
@@ -166,7 +170,7 @@ class ProlecOne extends GetView<ProlecController> {
           child: Center(
             child: Column(
               children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 100)),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 80)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

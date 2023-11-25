@@ -42,7 +42,7 @@ class InitController extends GetxController {
   Stream<String> get speechTextStream => _speechTextStreamController.stream;
 
   late Timer cronometro;
-  late User use;
+  late User use = User("Juanjsn", "12", "2", "", "password", "phone");
   String tiempo = '';
   int puntos = 0;
   int puntosH = 0;

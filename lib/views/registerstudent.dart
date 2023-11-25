@@ -153,7 +153,7 @@ class LoginStudentPage extends GetView<RegisterController> {
                   onPressed: () {
                     controller.login();
                   },
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     minHeight: 40, // Altura mínima
                     minWidth: 100, // Ancho mínimo
                   ),

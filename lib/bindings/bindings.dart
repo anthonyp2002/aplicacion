@@ -6,6 +6,7 @@ import 'package:aplicacion/controllers/Prolec_Controller/prolec_controller.dart'
 import 'package:aplicacion/controllers/Prolec_Controller/prolecb_controller.dart';
 import 'package:aplicacion/controllers/Prolec_Controller/prolecc_controller.dart';
 import 'package:aplicacion/controllers/Prolec_Controller/prolecd_a_controller.dart';
+import 'package:aplicacion/controllers/UseController/teachercontroller.dart';
 import 'package:aplicacion/controllers/initController.dart';
 import 'package:aplicacion/controllers/registercontroller.dart';
 import 'package:get/get.dart';
@@ -28,5 +29,6 @@ class LoginBinding implements Bindings {
     Get.lazyPut(() => ProlecDBController());
     Get.lazyPut(() => ProlecRCController());
     Get.lazyPut(() => ProlecRCController());
+    Get.lazyPut(() => TeacherController());
   }
 }

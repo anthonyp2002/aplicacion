@@ -8,6 +8,7 @@ import "package:cloud_firestore/cloud_firestore.dart";
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 String docuId = "";
+String docuIdTeacer = "";
 
 Future<List<String>> getPal() async {
   CollectionReference collectionReferenceWord =
@@ -36,6 +37,22 @@ Future<void> addStudent(
   docuId = documentReference.id;
 
   print("ID del documento creado: $docuId");
+}
+
+Future<void> addTea(String name, String gmail, String phone, String age,
+    String password) async {
+  CollectionReference cuentaCollection = db.collection("CuentaTeacher");
+
+  DocumentReference documentReference = await cuentaCollection.add({
+    "name": name,
+    "gmail": gmail,
+    "age": age,
+    "phone": phone,
+    "password": password
+  });
+  docuIdTeacer = documentReference.id;
+
+  print("ID del documento creado: $docuIdTeacer");
 }
 
 Future<void> addPunctuations(String nameUse, String time, int pnt, int pntH,

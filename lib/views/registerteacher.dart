@@ -170,7 +170,7 @@ class LoginPage extends GetView<RegisterController> {
                 RawMaterialButton(
                   onPressed: () {
                     //  Get.offAllNamed('/prolec');
-                    controller.login();
+                    controller.loginTe();
                   },
                   fillColor: Colors.blue.shade600,
                   shape: RoundedRectangleBorder(

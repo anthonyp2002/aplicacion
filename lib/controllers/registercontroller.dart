@@ -99,4 +99,25 @@ class RegisterController extends GetxController {
       Get.snackbar('Error', 'Verifique los campos');
     }
   }
+
+  void loginTe() {
+    final a = User(
+        fullNameControler.text,
+        ageController.text,
+        anioLecController.text,
+        gmailController.text,
+        passwordController.text,
+        phoneController.text);
+    if (singinFormKey.currentState!.validate()) {
+      Get.snackbar('Login', 'Registrado Correctamente');
+      // ignore: avoid_print
+      print(a.fullname);
+      // ignore: avoid_print
+      print(a.anioLec);
+      addTea(a.fullname, a.gmail, a.phone, a.age, a.password);
+      Get.offAllNamed('/teacherPage');
+    } else {
+      Get.snackbar('Error', 'Verifique los campos');
+    }
+  }
 }

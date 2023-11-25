@@ -5,6 +5,7 @@ import 'package:aplicacion/views/ProlecR/prolec_r.dart';
 import 'package:aplicacion/views/ProlecR/prolec_r_a.dart';
 import 'package:aplicacion/views/ProlecR/prolec_r_b.dart';
 import 'package:aplicacion/views/ProlecR/prolec_r_c.dart';
+import 'package:aplicacion/views/Use/teacher.dart';
 import 'package:aplicacion/views/registerstudent.dart';
 import 'package:get/get.dart';
 import '../views/Prolec/prolec_d_b.dart';
@@ -83,6 +84,12 @@ appRoutes({required List<CameraDescription> cameras}) => [
       GetPage(
         name: '/prolecRC',
         page: () => ProlecRCPage(),
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+      GetPage(
+        name: '/teacherPage',
+        page: () => TeacherPage(),
         transition: Transition.leftToRightWithFade,
         transitionDuration: const Duration(milliseconds: 500),
       ),

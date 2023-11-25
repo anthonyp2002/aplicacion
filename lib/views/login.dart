@@ -118,7 +118,7 @@ class HomeLogin extends GetView<loginController> {
                                           vertical: 10)),
                                   RawMaterialButton(
                                     onPressed: () {
-                                      return controller.login();
+                                      Get.offAllNamed('/teacherPage');
                                     },
                                     child: Text(
                                       'Ingresar',

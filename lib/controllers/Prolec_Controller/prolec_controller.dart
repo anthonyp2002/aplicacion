@@ -81,8 +81,10 @@ class ProlecController extends GetxController {
   void cambiarPalabras() {
     indexPalabra.value += 4;
     if (indexPalabra.value >= palabras.length) {
+      print(use.fullname);
       cronometro.cancel();
       dispose();
+      Get.put(InitController());
       Get.offAllNamed('/prolecB');
       Get.find<InitController>()
           .datos(use, obtenerTiempoFormateado(), 0, 0, 0, 0, 0, 0, 0);
