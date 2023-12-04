@@ -4,7 +4,10 @@ import "package:aplicacion/models/orto.dart";
 import "package:aplicacion/models/prolcec_model.dart";
 import "package:aplicacion/models/prolecb_model.dart";
 import "package:aplicacion/models/seudo.dart";
+import "package:aplicacion/models/userStudent.dart";
+import "package:aplicacion/models/userTeacher.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:get/get.dart";
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 String docuId = "";
@@ -24,34 +27,78 @@ Future<List<String>> getPal() async {
   return words;
 }
 
+Future<RxList<UserStudent>> getStudenT() async {
+  RxList<UserStudent> students = <UserStudent>[].obs;
+  await db
+      .collection('CuentaStudent')
+      .where('idTeacher', isEqualTo: docuIdTeacer)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    for (var doc in querySnapshot.docs) {
+      students.add(UserStudent.fromDocument(doc));
+      print(doc);
+    }
+  });
+  return students;
+}
+
+Future<RxList<UserTeacher>> getTeacher() async {
+  RxList<UserTeacher> teacer = <UserTeacher>[].obs;
+  await db
+      .collection('CuentaTeacher')
+      .where('idTeacher', isEqualTo: docuIdTeacer)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    for (var doc in querySnapshot.docs) {
+      teacer.add(UserTeacher.fromDocument(doc));
+    }
+  });
+  return teacer;
+}
+
+Future<RxList<UserTeacher>> getTeache() async {
+  RxList<UserTeacher> teacer = <UserTeacher>[].obs;
+
+  DocumentSnapshot doc =
+      await db.collection('CuentaTeacher').doc(docuIdTeacer).get();
+  if (doc.exists) {
+    teacer.add(UserTeacher.fromDocument(doc));
+    return teacer;
+  } else {
+    print('No se encontró un profesor con el ID: $docuIdTeacer');
+    return teacer;
+  }
+}
+
 Future<void> addStudent(
-    String name, String age, String schoolYear, String password) async {
+    String name, String birthdate, String schoolYear, String password) async {
   CollectionReference cuentaCollection = db.collection("CuentaStudent");
 
   DocumentReference documentReference = await cuentaCollection.add({
     "name": name,
-    "age": age,
+    "birthdate": birthdate,
     "schoolYear": schoolYear,
-    "password": password
+    "password": password,
+    "idTeacher": docuIdTeacer
   });
   docuId = documentReference.id;
 
   print("ID del documento creado: $docuId");
 }
 
-Future<void> addTea(String name, String gmail, String phone, String age,
+Future<void> addTea(String name, String gmail, String phone, String birthdate,
     String password) async {
   CollectionReference cuentaCollection = db.collection("CuentaTeacher");
 
   DocumentReference documentReference = await cuentaCollection.add({
     "name": name,
     "gmail": gmail,
-    "age": age,
+    "birthdate": birthdate,
     "phone": phone,
     "password": password
   });
   docuIdTeacer = documentReference.id;
-
+  getTeache();
   print("ID del documento creado: $docuIdTeacer");
 }
 
@@ -185,4 +232,14 @@ Future<List<SeudoModel>> getPalabras(String palabras) async {
     pal.add(SeudoModel(id, words, answer));
   }
   return pal;
+}
+
+Future<void> updateStudent(UserStudent user) async {
+  await db.collection("CuentaStudent").doc(user.idStudent).set({
+    "name": user.fullname,
+    "birthdate": user.birthdate,
+    "schoolYear": user.anioLec,
+    "password": user.password,
+    "idTeacher": user.idTeacher
+  });
 }

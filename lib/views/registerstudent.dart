@@ -11,41 +11,57 @@ class LoginStudentPage extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     Get.put(RegisterController());
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context)
-                  .size
-                  .height), // Establece una restricción máxima de altura
-          child: SingleChildScrollView(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Crear Cuenta',
-                        style: TextStyle(
-                            fontSize: 25.0, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 30),
-                      _form(context),
-                    ],
+    return StatefulBuilder(builder: (context, setState) {
+      return Scaffold(
+        body: SafeArea(
+          child: Container(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context)
+                    .size
+                    .height), // Establece una restricción máxima de altura
+            child: SingleChildScrollView(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Crear Cuenta',
+                          style: TextStyle(
+                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 30),
+                        _form(context, setState),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
-      ),
+      );
+    });
+  }
+
+  Future<void> _seleccionarFecha(BuildContext context) async {
+    final DateTime? fechaNueva = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
     );
+
+    if (fechaNueva != null) {
+      controller.ageController.text = fechaNueva.toIso8601String().substring(0,
+          10); // Actualiza el texto del controlador con la fecha seleccionada
+    }
   }
 
   //Formulario
-  Widget _form(BuildContext context) {
+  Widget _form(BuildContext context, setState) {
     bool obscu = true;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
@@ -74,10 +90,16 @@ class LoginStudentPage extends GetView<RegisterController> {
               keyboardType: TextInputType.number,
               enableInteractiveSelection: false,
               autofocus: true,
+              readOnly: true,
               decoration: InputDecoration(
-                  hintText: "Edad",
-                  labelText: "Edad",
-                  suffixIcon: const Icon(Icons.calendar_month),
+                  hintText: "Fecha De Nacimiento",
+                  labelText: "Fecha De Nacimiento",
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.calendar_month),
+                    onPressed: () {
+                      _seleccionarFecha(context);
+                    },
+                  ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0))),
               validator: controller.validator,

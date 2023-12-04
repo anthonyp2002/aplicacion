@@ -4,7 +4,6 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icons.dart';
 import '../../controllers/Prolec_Controller/prolec_controller.dart';
 import '../../models/user.dart';
 
