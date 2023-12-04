@@ -1,8 +1,6 @@
 // ignore_for_file: file_names, camel_case_types
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../api/api.dart';
 
 class loginController extends GetxController {
   final loginFormKey = GlobalKey<FormState>(debugLabel: '__loginFormKey__');
@@ -29,15 +27,6 @@ class loginController extends GetxController {
   }
 
   void login() {
-    if (loginFormKey.currentState!.validate()) {
-      checkUser(user.text, password.text).then((auth) {
-        if (auth) {
-          Get.snackbar('Login', 'Ingresar');
-        } else {
-          Get.snackbar('Login', 'Contraseña o Usuario Invalido');
-        }
-      });
-    }
     user.clear();
     password.clear();
   }
