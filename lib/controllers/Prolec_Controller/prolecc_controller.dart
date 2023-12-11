@@ -7,6 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:string_similarity/string_similarity.dart';
 import '../../models/user.dart';
 
+/// `ProlecCController` es una subclase de `GetxController` que se utiliza para manejar varias operaciones en la aplicación.
+///
+/// La clase ProlecCController en Flutter es un controlador que se utiliza para manejar varias operaciones en la aplicación.
+/// Se inicializa con un PageController y contiene métodos para actualizar el usuario actual, el tiempo y los puntos,
+/// cambiar el valor de una variable observable, comparar respuestas y actualizar puntuaciones, y navegar a la siguiente pregunta o página.
+/// También interactúa con Firestore para actualizar los resultados.
+///
+/// La clase `ProlecCController` se utiliza principalmente en la aplicación para controlar el flujo de la aplicación,
+/// manejar el estado de la aplicación y realizar operaciones de reconocimiento de voz.
 class ProlecCController extends GetxController {
   late PageController pageController;
   var isLisent = false.obs;

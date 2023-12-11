@@ -5,7 +5,6 @@ import 'package:aplicacion/models/prolecb_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icons.dart';
 import '../../controllers/Prolec_Controller/prolecb_controller.dart';
 import '../../models/user.dart';
 

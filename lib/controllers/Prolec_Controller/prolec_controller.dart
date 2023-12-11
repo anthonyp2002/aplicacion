@@ -8,6 +8,13 @@ import 'dart:async';
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../models/user.dart';
 
+/// `ProlecController` es una subclase de `GetxController` que se utiliza para manejar varias operaciones en la aplicación.
+///
+/// Esta clase contiene varios métodos y variables observables para manejar operaciones como el reconocimiento de voz,
+/// la manipulación de palabras y el cronómetro. También se encarga de la interacción con Firestore para obtener y actualizar datos.
+///
+/// La clase `ProlecController` se utiliza principalmente en la aplicación para controlar el flujo de la aplicación,
+/// manejar el estado de la aplicación y realizar operaciones de reconocimiento de voz.
 class ProlecController extends GetxController {
   final RxList<String> palabrasVisibles = <String>[].obs;
   final RxInt indexPalabra = 0.obs;

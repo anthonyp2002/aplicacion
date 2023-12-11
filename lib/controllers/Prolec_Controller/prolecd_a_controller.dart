@@ -6,6 +6,13 @@ import 'dart:async';
 import '../../models/doc_model.dart';
 import '../../models/user.dart';
 
+/// `ProlecDAController` es una subclase de `GetxController` que se utiliza para manejar varias operaciones en la aplicación.
+///
+/// Esta clase contiene varios métodos y variables observables para manejar operaciones como el reconocimiento de voz,
+/// la manipulación de palabras y el cronómetro. También se encarga de la interacción con Firestore para obtener y actualizar datos.
+///
+/// La clase `ProlecDAController` se utiliza principalmente en la aplicación para controlar el flujo de la aplicación,
+/// manejar el estado de la aplicación y realizar operaciones de reconocimiento de voz.
 class ProlecDAController extends GetxController {
   Dog dog = Dog();
   double pitch = 1.0;

@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import "package:get/get.dart";
 import '../../models/user.dart';
 
+/// `ProlecbController` es una subclase de `GetxController` que se utiliza para manejar varias operaciones en la aplicación.
+///
+/// Esta clase contiene varios métodos y variables para manejar operaciones como la navegación entre páginas,
+/// el seguimiento de los resultados de las preguntas y la interacción con Firestore para obtener y actualizar datos.
+///
+/// La clase `ProlecbController` se utiliza principalmente en la aplicación para controlar el flujo de la aplicación,
+/// manejar el estado de la aplicación y realizar operaciones relacionadas con las preguntas y respuestas de la aplicación.
 class ProlecbController extends GetxController {
   int puntuacion = 0;
   late PageController pageController;

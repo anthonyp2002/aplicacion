@@ -13,7 +13,13 @@ import 'package:get/get.dart';
 import '../controllers/Prolec_Controller/prolecd_b_controller.dart';
 import '../controllers/loginController.dart';
 
+/// Clase `LoginBinding` que implementa `Bindings` de GetX en nuestro proyecto.
+///
+/// Esta clase se utiliza para inyectar las dependencias de los controladores en la aplicación utilizando GetX.
 class LoginBinding implements Bindings {
+  /// Sobreescribe el método `dependencies` de `Bindings`.
+  ///
+  /// Este método se utiliza para inyectar las dependencias de los controladores en la aplicación.
   @override
   void dependencies() {
     Get.lazyPut(() => InitController());

@@ -14,6 +14,10 @@ import '../views/Prolec/prolec_d_a.dart';
 import '../views/login.dart';
 import '../views/registerteacher.dart';
 
+/// Define las rutas de la aplicación.
+///
+/// Cada ruta se define como una `GetPage` que tiene un nombre (`name`), una función que devuelve la página (`page`),
+/// una transición (`transition`) y una duración de transición (`transitionDuration`).
 appRoutes({required List<CameraDescription> cameras}) => [
       GetPage(
         name: '/home',
