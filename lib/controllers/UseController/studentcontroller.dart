@@ -14,6 +14,7 @@ class StudentController extends GetxController {
   RxList cuestionarios = [].obs;
   final RxBool isTyping = false.obs;
   User a = User("", "", "", "gmail", "password", "");
+  bool isPressed = false;
 
   void onTabChange(int index) {
     print('Changing to tab index $index');

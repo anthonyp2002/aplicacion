@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
+import 'package:animated_icon_button/animated_icon_button.dart';
 import 'package:aplicacion/controllers/UseController/studentcontroller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +13,7 @@ class StudentPage extends GetView<StudentController> {
   List<Widget> buildWidgetList(context, setState) {
     return [
       Home(controller),
-      IA(setState, controller),
+      IA(setState, controller, context),
       Questionnaire(controller),
     ];
   }
@@ -239,114 +241,244 @@ Widget Home(controller) {
       });
 }
 
-Widget IA(setState, controller) {
-  return Column(
+Widget IA(setState, controller, context) {
+  return Stack(
     children: [
-      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-      Row(
-        children: [
-          Text(
-            "Generardor de Cuentos",
-            style: GoogleFonts.ysabeau(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.w400),
-          ),
-        ],
-      ),
-      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-      Expanded(
-        child: FractionallySizedBox(
-          heightFactor: 1,
-          widthFactor: 1,
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(
-                    100.0), // Radio en la esquina superior izquierda
-                topRight: Radius.circular(
-                    100.0), // Radio en la esquina superior derecha
-              ),
-            ),
-            child: Column(
-              children: [
-                const Text(""),
-                const Spacer(),
-                Row(
-                  children: [
-                    const Spacer(),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: FloatingActionButton(
-                        onPressed: () {
-                          print('Agregar');
-                        },
-                        backgroundColor: Colors.lightBlueAccent,
-                        child: const Icon(Icons.add),
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 3)),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 10.0), // Margen a ambos lados
-                  child: Row(
+      Positioned(
+          width: 288,
+          height: MediaQuery.of(context).size.height,
+          child: Navigation(setState, controller)),
+      Transform.translate(
+        offset: Offset(288, 0),
+        child: Transform.scale(
+          scale: 1,
+          child: Column(
+            children: [
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              Row(
+                children: [
+                  Stack(
                     children: [
-                      Expanded(
-                        child: TextFormField(
-                          enableInteractiveSelection: true,
-                          autofocus: false,
-                          onChanged: (text) {
-                            controller.isTyping.value = text.isNotEmpty;
-                          },
-                          decoration: InputDecoration(
-                            fillColor: Colors.blue,
-                            labelText: "Mensaje...",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                            ),
-                            focusColor: Colors.white,
-                          ),
-                          style: GoogleFonts.ysabeau(
-                              fontSize: 15,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 5)),
-                      Container(
-                        width: 56.0, // Ancho del contenedor
-                        height: 56.0, // Altura del contenedor
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors
-                              .blue, // Color de fondo del contenedor redondo
-                        ),
+                      SafeArea(
+                          child: Container(
+                        margin: EdgeInsets.only(left: 20),
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                offset: Offset(0, 3),
+                                blurRadius: 8,
+                              )
+                            ]),
                         child: IconButton(
-                          icon: controller.isTyping.value
-                              ? const Icon(Icons.send,
-                                  color: Colors
-                                      .white) // Color del icono cuando se está escribiendo
-                              : const Icon(Icons.mic,
-                                  color: Colors
-                                      .white), // Color del icono cuando no se está escribiendo
+                          icon: LineIcon(LineIcons.bars),
                           onPressed: () {
-                            if (controller.isTyping.value == false) {
-                              print("Presionado Micro");
-                            } else {
-                              print("Presionado Send");
-                            }
+                            print("Presione para acceder al menu");
                           },
                         ),
-                      )
+                      ))
                     ],
                   ),
+                  Text(
+                    "Generardor de Cuentos",
+                    style: GoogleFonts.ysabeau(
+                        fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              Expanded(
+                child: FractionallySizedBox(
+                  heightFactor: 1,
+                  widthFactor: 1,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(
+                            100.0), // Radio en la esquina superior izquierda
+                        topRight: Radius.circular(
+                            100.0), // Radio en la esquina superior derecha
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(""),
+                        const Spacer(),
+                        Row(
+                          children: [
+                            const Spacer(),
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  print('Agregar');
+                                },
+                                backgroundColor: Colors.lightBlueAccent,
+                                child: const Icon(Icons.add),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 3)),
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 10.0), // Margen a ambos lados
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  enableInteractiveSelection: true,
+                                  autofocus: false,
+                                  onChanged: (text) {
+                                    controller.isTyping.value = text.isNotEmpty;
+                                  },
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.blue,
+                                    labelText: "Mensaje...",
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    focusColor: Colors.white,
+                                  ),
+                                  style: GoogleFonts.ysabeau(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 5)),
+                              Container(
+                                width: 56.0, // Ancho del contenedor
+                                height: 56.0, // Altura del contenedor
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors
+                                      .blue, // Color de fondo del contenedor redondo
+                                ),
+                                child: IconButton(
+                                  icon: controller.isTyping.value
+                                      ? const Icon(Icons.send,
+                                          color: Colors
+                                              .white) // Color del icono cuando se está escribiendo
+                                      : const Icon(Icons.mic,
+                                          color: Colors
+                                              .white), // Color del icono cuando no se está escribiendo
+                                  onPressed: () {
+                                    if (controller.isTyping.value == false) {
+                                      print("Presionado Micro");
+                                    } else {
+                                      print("Presionado Send");
+                                    }
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 5))
+                      ],
+                    ),
+                  ),
                 ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 5))
-              ],
-            ),
+              ),
+            ],
           ),
         ),
+      ),
+    ],
+  );
+}
+
+Widget Navigation(setState, controller) {
+  return Row(
+    children: [
+      Container(
+        width: 288,
+        height: double.infinity,
+        alignment: AlignmentDirectional.bottomStart,
+        color: const Color(0xFF17203A),
+        child: SafeArea(
+            child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.white24,
+                child: Icon(
+                  CupertinoIcons.book,
+                  color: Colors.white,
+                ),
+              ),
+              title: Text(
+                "Cuentos",
+                style: GoogleFonts.ysabeau(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w400),
+              ),
+              subtitle: Text(
+                "Registro",
+                style: GoogleFonts.ysabeau(
+                    color: Colors.white, fontWeight: FontWeight.w400),
+              ),
+            ),
+            Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
+            ListTile(
+              leading: SizedBox(
+                height: 34,
+                width: 34,
+                child: Tooltip(
+                  message: 'Agregar',
+                  child: AnimatedIconButton(
+                      onPressed: () {
+                        setState(() {
+                          controller.isPressed = controller.isPressed!;
+                        });
+                        // Aquí puedes manejar la lógica para agregar un reporte
+                        // por ejemplo, abrir un cuadro de diálogo o navegar a otra pantalla.
+                      },
+                      duration: Duration(milliseconds: 200),
+                      size: 32,
+                      icons: const <AnimatedIconItem>[
+                        AnimatedIconItem(
+                          icon: LineIcon(
+                            LineIcons.plus,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        AnimatedIconItem(
+                          icon: LineIcon(
+                            LineIcons.check,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ]),
+                ),
+              ),
+              title: Text(
+                "Nuevo Cuento",
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {
+                print("New Cuento");
+              },
+            )
+          ],
+        )),
       ),
     ],
   );

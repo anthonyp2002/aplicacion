@@ -64,7 +64,8 @@ dependencies:
   data_table_2: ^2.5.9
   firebase_auth: ^4.14.1
   google_sign_in: ^6.1.6
-
+  animated_icon_button: ^1.0.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
