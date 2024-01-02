@@ -3,9 +3,9 @@
 import 'package:aplicacion/controllers/UseController/teachercontroller.dart';
 import 'package:aplicacion/models/userStudent.dart';
 import 'package:aplicacion/services/firebase_service.dart';
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
@@ -15,14 +15,11 @@ class TeacherPage extends GetView<TeacherController> {
     return [
       Home(controller),
       Student(context, setState, controller.singinFormKey, controller),
-      const Text(
-        'Search',
-        style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
-      ),
+      Reportes(context, setState, controller),
     ];
   }
 
-  TeacherPage({super.key});
+  const TeacherPage({super.key});
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, setState) {
@@ -101,114 +98,151 @@ class TeacherPage extends GetView<TeacherController> {
 
 Widget Home(controller) {
   return FutureBuilder(
-    future: controller.getTeacher(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Center(child: CircularProgressIndicator());
-      } else if (snapshot.hasError) {
-        return Text('Error: ${snapshot.error}');
-      } else {
-        return Column(
-          children: [
-            const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-            const CircleAvatar(
-              backgroundColor: Colors.blue,
-              radius: 75,
-            ),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
-            const Text("Datos Personales",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const FractionallySizedBox(
-                    widthFactor:
-                        0.7, // El Divider ocupará el 50% del ancho de la pantalla
-                    child: Divider(
-                      color: Colors.black,
-                      thickness: 1.0,
-                    ),
-                  ),
-                  FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: Column(
-                      children: [
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5)),
-                        const Row(
-                          children: [
-                            LineIcon(LineIcons.user), // Este es el ícono
-                            Text(" Nombre:",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 3)),
-                        ...controller.teacers.map((teacher) => Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                teacher.fullname,
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w300),
-                              ),
-                            )),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10)),
-                        const Row(
-                          children: [
-                            LineIcon(LineIcons.envelope), // Este es el ícono
-                            Text(" Gmail:",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600)),
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: Icon(LineIcons.userEdit)),
-                          ],
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 3)),
-                        ...controller.teacers.map((teacher) => Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                teacher.gmail,
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w300),
-                              ),
-                            )),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 10)),
-                        const Row(
-                          children: [
-                            LineIcon(
-                                LineIcons.calendarCheckAlt), // Este es el ícono
-                            Text(" Fecha de Nacimiento:",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w600)),
-                          ],
-                        ),
-                        const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 5)),
-                        ...controller.teacers.map((teacher) => Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                teacher.age,
-                                style: const TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w300),
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                ],
+      future: controller.getTeacher(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else {
+          return Column(
+            children: [
+              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+              const CircleAvatar(
+                backgroundColor: Colors.blue,
+                radius: 75,
               ),
-            ),
-          ],
-        );
-      }
-    },
-  );
+              const Padding(padding: EdgeInsets.symmetric(vertical: 15)),
+              const Text("Datos Personales",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const FractionallySizedBox(
+                      widthFactor:
+                          0.7, // El Divider ocupará el 50% del ancho de la pantalla
+                      child: Divider(
+                        color: Colors.black,
+                        thickness: 1.0,
+                      ),
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 0.7,
+                      child: Column(
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons.user), // Este es el ícono
+                              Text(" Nombre:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                              Spacer(),
+                              Icon(LineIcons.userEdit),
+                            ],
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3)),
+                          ...controller.teacers.map((teacher) => Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  teacher.fullname,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                              )),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons.envelope), // Este es el ícono
+                              Text(" Gmail:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                              Spacer(),
+                              Icon(LineIcons.userEdit),
+                            ],
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3)),
+                          ...controller.teacers.map((teacher) => Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  teacher.gmail,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                              )),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons
+                                  .calendarCheckAlt), // Este es el ícono
+                              Text(" Fecha de Nacimiento:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                              Spacer(),
+                              Icon(LineIcons.userEdit),
+                            ],
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5)),
+                          ...controller.teacers.map((teacher) => Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  teacher.age,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                              )),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons
+                                  .calendarCheckAlt), // Este es el ícono
+                              Text(" Edad:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 5)),
+                          ...controller.teacers.map((teacher) => Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  teacher.edad,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300),
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.offAllNamed("/home");
+                },
+                child: const Text('Cerrar Sesión'),
+              ),
+            ],
+          );
+        }
+      });
 }
 
 Widget Student(context, setState, singinFormKey, controller) {
@@ -218,131 +252,54 @@ Widget Student(context, setState, singinFormKey, controller) {
         const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
         const Text("Alumnos",
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
-        const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: 400,
-            height: 450,
-            child: Obx(() {
-              controller.getStudent();
-              if (controller.students.isNotEmpty) {
-                controller.getStudent();
-                List<UserStudent> students =
-                    controller.students as List<UserStudent>;
-                List<DataRow> dataRows =
-                    students.map<DataRow>((UserStudent student) {
-                  return DataRow(
-                    cells: <DataCell>[
-                      DataCell(Text(student.fullname)),
-                      DataCell(Text(student.birthdate)),
-                      DataCell(Text(student.anioLec)),
-                      DataCell(IconButton(
-                        icon: const Icon(LineIcons.userEdit),
-                        onPressed: () {
-                          final fullnameController =
-                              TextEditingController(text: student.fullname);
-                          final ageController =
-                              TextEditingController(text: student.birthdate);
-                          final anioLecController =
-                              TextEditingController(text: student.anioLec);
-                          final idController =
-                              TextEditingController(text: student.idStudent);
-                          final idTeacher =
-                              TextEditingController(text: student.idTeacher);
-                          final pasword =
-                              TextEditingController(text: student.password);
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false, // Evita cerrar e
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Editar estudiante'),
-                                content: SizedBox(
-                                  height: 200,
-                                  child: Column(
-                                    children: <Widget>[
-                                      TextField(
-                                        controller: fullnameController,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Nombre completo'),
-                                      ),
-                                      TextField(
-                                        controller: ageController,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Edad'),
-                                      ),
-                                      TextField(
-                                        controller: anioLecController,
-                                        decoration: const InputDecoration(
-                                            labelText: 'Año lectivo'),
-                                      ),
-                                    ],
-                                  ),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+        Obx(() {
+          List<UserStudent> students = controller.students as List<UserStudent>;
+          return SizedBox(
+            height: 470.0,
+            child: ListView.builder(
+              itemCount: students.length,
+              padding: const EdgeInsets.only(top: 3.0),
+              itemBuilder: (context, position) {
+                return Card(
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(5.0),
+                        child: const CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          radius: 35,
+                        ),
+                      ),
+                      Expanded(
+                        child: ListTile(
+                            title: Text(
+                              students[position].fullname,
+                              style: GoogleFonts.ysabeau(
+                                  fontSize: 22,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            subtitle: Row(
+                              children: [
+                                Text(
+                                  students[position].anioLec,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w300),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('Cerrar'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      setState(() {
-                                        controller.getStudent();
-                                      });
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Guardar'),
-                                    onPressed: () {
-                                      UserStudent users = UserStudent(
-                                          idStudent: idController.text,
-                                          fullname: fullnameController.text,
-                                          birthdate: ageController.text,
-                                          anioLec: anioLecController.text,
-                                          password: pasword.text,
-                                          idTeacher: idTeacher.text);
-                                      updateStudent(users);
-                                      setState(() {
-                                        controller.getStudent();
-                                      });
-                                      controller.update();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      )),
+                              ],
+                            ),
+                            onTap: () => infStudent(context, setState,
+                                controller, students[position])),
+                      ),
                     ],
-                  );
-                }).toList();
-                return DataTable2(
-                  checkboxAlignment: Alignment.bottomCenter,
-                  columns: const [
-                    DataColumn2(
-                      label: Center(child: Text('Nombre')),
-                    ),
-                    DataColumn2(
-                      label: Center(child: Text('Edad')),
-                    ),
-                    DataColumn2(
-                      label: Center(child: Text('Test')),
-                    ),
-                    DataColumn2(
-                      label: Center(child: Text('Editar')),
-                    )
-                  ],
-                  rows: dataRows,
+                  ),
                 );
-              } else {
-                return const Center(child: Text("No tiene alumnos asignados"));
-              }
-            }),
-          ),
-        ),
+              },
+            ),
+          );
+        }),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -359,8 +316,7 @@ Widget Student(context, setState, singinFormKey, controller) {
                   isScrollControlled: true,
                   builder: (context) {
                     return FractionallySizedBox(
-                      heightFactor:
-                          0.8, // Ajusta este valor según tus necesidades
+                      heightFactor: 0.8,
                       child: Container(
                         padding: const EdgeInsets.all(16.0),
                         child: Form(
@@ -419,9 +375,15 @@ Widget Student(context, setState, singinFormKey, controller) {
                                       LineIcons.calendarAlt,
                                       color: Color.fromARGB(255, 64, 66, 68),
                                     ),
-                                    hintText: "Edad",
+                                    hintText: "Fecha De Nacimiento",
                                     hintStyle: const TextStyle(
                                         color: Color.fromARGB(255, 35, 33, 33)),
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.calendar_month),
+                                      onPressed: () {
+                                        _seleccionarFecha(context, controller);
+                                      },
+                                    ),
                                     filled: true,
                                     fillColor: Colors.blue[50]),
                                 validator: controller.validator,
@@ -491,6 +453,10 @@ Widget Student(context, setState, singinFormKey, controller) {
                                     ),
                                     onPressed: () {
                                       setState(() {
+                                        controller.fullNameControler.clear();
+                                        controller.ageController.clear();
+                                        controller.anioLecController.clear();
+                                        controller.passwordController.clear();
                                         controller.getStudent();
                                       });
                                       Navigator.pop(context);
@@ -537,6 +503,332 @@ Widget Student(context, setState, singinFormKey, controller) {
                 width:
                     16), // Espacio entre el DataTable y el FloatingActionButton
           ],
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> _seleccionarFecha(BuildContext context, controller) async {
+  final DateTime? fechaNueva = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(1900),
+    lastDate: DateTime(2100),
+  );
+  if (fechaNueva != null) {
+    controller.ageController.text = fechaNueva.toIso8601String().substring(
+        0, 10); // Actualiza el texto del controlador con la fecha seleccionada
+  }
+  DateTime fecha = DateTime.parse(controller.ageController.text);
+  controller.calculateAge(fecha);
+}
+
+Future infStudent(BuildContext context, setState, controller, studens) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Center(child: Text('Estudiante')),
+        content: SizedBox(
+          height: 350,
+          child: Column(
+            children: <Widget>[
+              const CircleAvatar(
+                backgroundColor: Colors.blue,
+                radius: 50,
+              ),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+              const Text("Datos Personales",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+              Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const FractionallySizedBox(
+                      widthFactor:
+                          1, // El Divider ocupará el 50% del ancho de la pantalla
+                      child: Divider(
+                        color: Colors.black,
+                        thickness: 1.0,
+                      ),
+                    ),
+                    FractionallySizedBox(
+                      widthFactor: 1,
+                      child: Column(
+                        children: [
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons.user), // Este es el ícono
+                              Text(" Nombre:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              studens.fullname,
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons.envelope), // Este es el ícono
+                              Text(" Año Lectivo:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              studens.anioLec,
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons
+                                  .calendarCheckAlt), // Este es el ícono
+                              Text(" Fecha de Nacimiento:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              studens.birthdate,
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3)),
+                          const Row(
+                            children: [
+                              LineIcon(LineIcons
+                                  .calendarCheckAlt), // Este es el ícono
+                              Text(" Edad:",
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              studens.age,
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w300),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cerrar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Editar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                controller.getStudent();
+              });
+              editStuden(context, setState, controller, studens);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future editStuden(BuildContext context, setState, controller, studens) {
+  final fullnameController = TextEditingController(text: studens.fullname);
+  final ageController = TextEditingController(text: studens.birthdate);
+  final anioLecController = TextEditingController(text: studens.anioLec);
+  final idController = TextEditingController(text: studens.idStudent);
+  final idTeacher = TextEditingController(text: studens.idTeacher);
+  final pasword = TextEditingController(text: studens.password);
+  return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Center(child: Text('Estudiante')),
+          content: SizedBox(
+            height: 200,
+            child: Column(
+              children: <Widget>[
+                TextField(
+                  controller: fullnameController,
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre completo'),
+                ),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  enableInteractiveSelection: false,
+                  decoration: InputDecoration(
+                    hintText: "Fecha De Nacimiento",
+                    labelText: "Fecha De Nacimiento",
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.calendar_month),
+                      onPressed: () async {
+                        await _seleccionarFecha(context, controller);
+                        ageController.text = controller.ageController.text;
+                      },
+                    ),
+                  ),
+                  controller: ageController,
+                ),
+                TextField(
+                  controller: anioLecController,
+                  decoration: const InputDecoration(labelText: 'Año lectivo'),
+                ),
+              ],
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  controller.getStudent();
+                });
+              },
+            ),
+            TextButton(
+              child: const Text('Guardar'),
+              onPressed: () async {
+                UserStudent users = UserStudent(
+                    idStudent: idController.text,
+                    fullname: fullnameController.text,
+                    birthdate: ageController.text,
+                    age: controller.age.toString(),
+                    anioLec: anioLecController.text,
+                    password: pasword.text,
+                    idTeacher: idTeacher.text);
+                updateStudent(users);
+                Navigator.of(context).pop();
+                await controller.getStudent();
+                setState(() {
+                  controller.getStudent();
+                });
+                controller.update();
+              },
+            ),
+          ],
+        );
+      });
+}
+
+Widget Reportes(context, setState, controller) {
+  final TextEditingController nameStudent = TextEditingController();
+  return Center(
+    child: Column(
+      children: [
+        const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+        const Text("Reporte",
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+        const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+        FractionallySizedBox(
+          widthFactor: 0.8,
+          child: TextFormField(
+              enableInteractiveSelection: false,
+              autofocus: true,
+              decoration: InputDecoration(
+                  hintText: "Nombre del Estudiante",
+                  labelText: "Nombre del Estudiante",
+                  suffixIcon: const Icon(
+                    Icons.search,
+                  ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0))),
+              controller: nameStudent),
+        ),
+        TextButton(
+          child: const Text('Buscar'),
+          onPressed: () async {
+            await controller.getStuden(nameStudent.text);
+            setState(() {
+              controller.getStuden(nameStudent.text);
+            });
+          },
+        ),
+        Obx(() {
+          List<UserStudent> estudiante =
+              controller.estudiante as List<UserStudent>;
+          return Container(
+              height: 470.0,
+              color: Colors.amber,
+              child: ListView.builder(
+                  itemCount: estudiante.length,
+                  padding: const EdgeInsets.only(top: 3.0),
+                  itemBuilder: (context, position) {
+                    return Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            estudiante[position].fullname,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w300),
+                          ),
+                        ),
+                        const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10)),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Ningun Cuestionario Resuelto",
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w300),
+                          ),
+                        ),
+                      ],
+                    );
+                  }));
+        }),
+        const FractionallySizedBox(
+          widthFactor: 0.8,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Reporte:",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300),
+            ),
+          ),
         ),
       ],
     ),

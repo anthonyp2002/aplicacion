@@ -208,7 +208,9 @@ class ProlecFour extends GetView<ProlecDAController> {
               onTap: () {
                 setState(() {
                   controller.tapCounter++;
+                  print(controller.tapCounter);
                   if (controller.tapCounter == 3) {
+                    controller.tapCounter = 0;
                     controller.nextQuestions();
                     controller.puntuacion++;
                   }

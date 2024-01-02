@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserTeacher {
   final String fullname;
   final String gmail;
+  final String edad;
   final String phone;
   final String age;
   final String password;
@@ -17,6 +18,7 @@ class UserTeacher {
   UserTeacher({
     required this.fullname,
     required this.gmail,
+    required this.edad,
     required this.phone,
     required this.age,
     required this.password,
@@ -28,6 +30,7 @@ class UserTeacher {
   factory UserTeacher.fromDocument(DocumentSnapshot doc) {
     return UserTeacher(
       gmail: doc["gmail"],
+      edad: doc['age'],
       phone: doc["phone"],
       fullname: doc['name'],
       age: doc["birthdate"],

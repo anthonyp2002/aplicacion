@@ -1,4 +1,7 @@
 // ignore_for_file: file_names, camel_case_types
+import 'package:aplicacion/controllers/UseController/studentcontroller.dart';
+import 'package:aplicacion/controllers/UseController/teachercontroller.dart';
+import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,9 +29,23 @@ class loginController extends GetxController {
     return null;
   }
 
-  void login() {
+  Future<void> login(String name, String pass) async {
+    String checkUser = await verificarCredenciales(name, pass);
     user.clear();
     password.clear();
+    if (checkUser == "Student") {
+      bool cuestio = await getGustos();
+      print("Este usuario $cuestio el cues de Gustos");
+      if (cuestio == false) {
+        await Get.offAllNamed('/gustosPage');
+      } else if (cuestio == true) {
+        Get.lazyPut(() => StudentController());
+        Get.offAllNamed('/studentPage');
+      }
+    } else if (checkUser == "Teacher") {
+      Get.lazyPut(() => TeacherController());
+      Get.offAllNamed('/teacherPage');
+    }
   }
 
   void showAccountTypeDialog() {

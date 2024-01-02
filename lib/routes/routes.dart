@@ -1,3 +1,4 @@
+import 'package:aplicacion/views/Gustos/gustos.dart';
 import 'package:aplicacion/views/Prolec/prolec_a.dart';
 import 'package:aplicacion/views/Prolec/prolec_b.dart';
 import 'package:aplicacion/views/Prolec/prolec_c.dart';
@@ -5,6 +6,7 @@ import 'package:aplicacion/views/ProlecR/prolec_r.dart';
 import 'package:aplicacion/views/ProlecR/prolec_r_a.dart';
 import 'package:aplicacion/views/ProlecR/prolec_r_b.dart';
 import 'package:aplicacion/views/ProlecR/prolec_r_c.dart';
+import 'package:aplicacion/views/Use/student.dart';
 import 'package:aplicacion/views/Use/teacher.dart';
 import 'package:aplicacion/views/registerstudent.dart';
 import 'package:get/get.dart';
@@ -93,7 +95,19 @@ appRoutes({required List<CameraDescription> cameras}) => [
       ),
       GetPage(
         name: '/teacherPage',
-        page: () => TeacherPage(),
+        page: () => const TeacherPage(),
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+      GetPage(
+        name: '/studentPage',
+        page: () => const StudentPage(),
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+      GetPage(
+        name: '/gustosPage',
+        page: () => GustPage(),
         transition: Transition.leftToRightWithFade,
         transitionDuration: const Duration(milliseconds: 500),
       ),

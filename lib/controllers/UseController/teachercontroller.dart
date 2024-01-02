@@ -10,6 +10,7 @@ class TeacherController extends GetxController {
       GlobalKey<FormState>(debugLabel: '__singinFormKey__');
   final _selectedIndex = 0.obs;
   RxList<UserStudent> students = <UserStudent>[].obs;
+  RxList<UserStudent> estudiante = <UserStudent>[].obs;
   RxList<UserTeacher> teacers = <UserTeacher>[].obs;
   final passwordController = TextEditingController();
   final gmailController = TextEditingController();
@@ -18,7 +19,7 @@ class TeacherController extends GetxController {
   final ageController = TextEditingController();
   final anioLecController = TextEditingController();
   final confirmController = TextEditingController();
-
+  RxInt age = 0.obs;
   int get selectedIndex => _selectedIndex.value;
   var student;
   void onTabChange(int index) {
@@ -40,7 +41,8 @@ class TeacherController extends GetxController {
         gmailController.text,
         passwordController.text,
         phoneController.text);
-    addStudent(a.fullname, a.age, a.anioLec, a.password);
+    print(age.toString());
+    addStudent(a.fullname, a.age, age.toString(), a.anioLec, a.password);
   }
 
   getStudent() async {
@@ -54,6 +56,15 @@ class TeacherController extends GetxController {
     teacers = await getTeache();
     for (var teacer in teacers) {
       print(teacer.fullname);
+    }
+    refresh();
+    update();
+  }
+
+  getStuden(String name) async {
+    estudiante = await getStuByName(name);
+    for (var estudiante in estudiante) {
+      print(estudiante.fullname);
     }
     refresh();
     update();
@@ -101,13 +112,19 @@ class TeacherController extends GetxController {
     return null;
   }
 
-  String? confirmPasswordValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Ingrese una contraseña';
+  int calculateAge(DateTime birthDate) {
+    final DateTime currentDate = DateTime.now();
+    age.value = currentDate.year - birthDate.year;
+
+    // Ajustar la edad si aún no ha llegado el cumpleaños en el año actual
+    if (currentDate.month < birthDate.month ||
+        (currentDate.month == birthDate.month &&
+            currentDate.day < birthDate.day)) {
+      print(age);
+      return (age.value - 1);
+    } else {
+      print(age);
+      return age.value;
     }
-    if (value != passwordController.text) {
-      return 'No coinciden las contraseña';
-    }
-    return null;
   }
 }

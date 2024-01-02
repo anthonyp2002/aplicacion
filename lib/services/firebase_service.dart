@@ -1,5 +1,6 @@
-// ignore_for_file: non_constant_identifier_names, unused_element
+// ignore_for_file: non_constant_identifier_names, unused_element, avoid_print
 
+import "package:aplicacion/models/img_gustos.dart";
 import "package:aplicacion/models/orto.dart";
 import "package:aplicacion/models/prolcec_model.dart";
 import "package:aplicacion/models/prolecb_model.dart";
@@ -15,6 +16,8 @@ FirebaseFirestore db = FirebaseFirestore.instance;
 // Inicializa dos cadenas vacías.
 String docuId = "";
 String docuIdTeacer = "";
+String docuIdStudent = "";
+int a = 0;
 
 /// Obtiene una lista de palabras de Firestore.
 ///
@@ -45,7 +48,7 @@ Future<List<String>> getPal() async {
 Future<RxList<UserStudent>> getStudenT() async {
   // Crea una lista observable de estudiantes.
   RxList<UserStudent> students = <UserStudent>[].obs;
-
+  print(docuId);
   // Realiza la consulta a Firestore.
   await db
       .collection('CuentaStudent')
@@ -86,6 +89,127 @@ Future<RxList<UserTeacher>> getTeache() async {
   }
 }
 
+/// Obtiene una lista de profesor de Firestore.
+///
+/// Esta función consulta la colección 'CuentaTeacher' en Firestore y devuelve una lista que contiene un solo profesor (`UserTeacher`),
+/// o una lista vacía si no se encuentra ningún profesor con el ID especificado.
+Future<RxList<UserStudent>> getEstudiante() async {
+  // Crea una lista observable de profesores.
+  RxList<UserStudent> student = <UserStudent>[].obs;
+
+  // Obtiene un documento de la colección 'CuentaTeacher' con el ID especificado.
+  print(docuId);
+  DocumentSnapshot doc = await db.collection('CuentaStudent').doc(docuId).get();
+
+  // Si el documento existe, crea una nueva instancia de `UserTeacher` y la añade a la lista de profesores.
+  if (doc.exists) {
+    student.add(UserStudent.fromDocument(doc));
+    return student;
+  } else {
+    // Si el documento no existe, imprime un mensaje de error y devuelve la lista vacía.
+    print('No se encontró un profesor con el ID: $docuIdTeacer');
+    return student;
+  }
+}
+
+Future<void> addIamges(
+    int id, String questions, Map<String, Map<String, bool>> images) async {
+  print(images);
+  try {
+    await FirebaseFirestore.instance
+        .collection("Data")
+        .doc("Images")
+        .collection("ImagenesGustos")
+        .add({
+      "id": id,
+      "questions": questions,
+      "UrlImages": images,
+      // ... otros campos y valores que desees agregar
+    });
+  } catch (error) {
+    print('Error al agregar datos: $error');
+  }
+}
+
+/// Obtiene una lista de profesor de Firestore.
+///
+/// Esta función consulta la colección 'CuentaTeacher' en Firestore y devuelve una lista que contiene un solo profesor (`UserTeacher`),
+/// o una lista vacía si no se encuentra ningún profesor con el ID especificado.
+Future<RxList<UserStudent>> getStuByName(String name) async {
+  // Crea una lista observable de estudiantes.
+  RxList<UserStudent> students = <UserStudent>[].obs;
+  print(docuIdTeacer);
+  print(name);
+  // Realiza la consulta a Firestore.
+  await db
+      .collection('CuentaStudent')
+      .where('name', isEqualTo: name)
+      .where('idTeacher', isEqualTo: docuIdTeacer)
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    // Para cada documento devuelto por la consulta, crea una nueva instancia de `UserStudent` y la añade a la lista de estudiantes.
+    for (var doc in querySnapshot.docs) {
+      print("Entro");
+      students.add(UserStudent.fromDocument(doc));
+      print(doc);
+    }
+  });
+
+  for (var student in students) {
+    print(student.idStudent);
+    final querySnapshot = await db
+        .collection("CuentaStudent")
+        .doc(student.idStudent)
+        .collection("Cuestionarios")
+        .get();
+    final cantidadCuestionarios = querySnapshot.docs.length;
+    print("La cantidad de cuestionarios es $cantidadCuestionarios");
+  }
+
+  // Devuelve la lista de estudiantes.
+  return students;
+}
+
+Future<String> verificarCredenciales(String name, String password) async {
+  print("MI nombre es $name");
+  print("Mi contraseña es $password");
+  try {
+    // Consulta en la colección de profesores
+    QuerySnapshot estudiantesSnapshot = await FirebaseFirestore.instance
+        .collection('CuentaStudent')
+        .where('name', isEqualTo: name)
+        .where('password', isEqualTo: password)
+        .get();
+
+    if (estudiantesSnapshot.docs.isNotEmpty) {
+      String id = estudiantesSnapshot.docs[0].id;
+      docuId = id;
+      print("El id de mi documento es $docuId");
+      return 'Student';
+    }
+
+    // Consulta en la colección de estudiantes
+    QuerySnapshot profesoresSnapshot = await FirebaseFirestore.instance
+        .collection('CuentaTeacher')
+        .where('name', isEqualTo: name)
+        .where('password', isEqualTo: password)
+        .get();
+
+    if (profesoresSnapshot.docs.isNotEmpty) {
+      String idT = profesoresSnapshot.docs[0].id;
+      docuIdTeacer = idT;
+      print("El id de mi documento es $docuIdTeacer");
+      return 'Teacher';
+    }
+
+    // Si no se encuentra en ninguna colección
+    return 'usuario_no_encontrado';
+  } catch (e) {
+    print('Error al consultar Firestore: $e');
+    return 'error';
+  }
+}
+
 /// Añade un nuevo estudiante a Firestore.
 ///
 /// Esta función crea un nuevo documento en la colección 'CuentaStudent' en Firestore con los datos proporcionados.
@@ -95,8 +219,8 @@ Future<RxList<UserTeacher>> getTeache() async {
 /// - `birthdate`: La fecha de nacimiento del estudiante.
 /// - `schoolYear`: El año escolar del estudiante.
 /// - `password`: La contraseña del estudiante.
-Future<void> addStudent(
-    String name, String birthdate, String schoolYear, String password) async {
+Future<void> addStudent(String name, String birthdate, String age,
+    String schoolYear, String password) async {
   // Obtiene una referencia a la colección 'CuentaStudent'.
   CollectionReference cuentaCollection = db.collection("CuentaStudent");
 
@@ -104,7 +228,8 @@ Future<void> addStudent(
   DocumentReference documentReference = await cuentaCollection.add({
     "name": name,
     "birthdate": birthdate,
-    "schoolYear": schoolYear,
+    "age": age,
+    "schoolYear": schoolYear + " Basica",
     "password": password,
     "idTeacher": docuIdTeacer
   });
@@ -126,8 +251,8 @@ Future<void> addStudent(
 /// - `birthdate`: La fecha de nacimiento del profesor.
 /// - `phone`: El teléfono del profesor.
 /// - `password`: La contraseña del profesor.
-Future<void> addTea(String name, String gmail, String phone, String birthdate,
-    String password) async {
+Future<void> addTea(String name, String gmail, String age, String phone,
+    String birthdate, String password) async {
   // Obtiene una referencia a la colección 'CuentaTeacher'.
   CollectionReference cuentaCollection = db.collection("CuentaTeacher");
 
@@ -136,6 +261,7 @@ Future<void> addTea(String name, String gmail, String phone, String birthdate,
     "name": name,
     "gmail": gmail,
     "birthdate": birthdate,
+    "age": age,
     "phone": phone,
     "password": password
   });
@@ -161,12 +287,15 @@ Future<void> addTea(String name, String gmail, String phone, String birthdate,
 /// - `pntA`: La puntuación de la prueba de antónimos.
 /// - `pntOr`: La puntuación de la prueba de ortografía.
 /// - `pntS`: La puntuación de la prueba de sinónimos.
-Future<void> addPunctuations(String nameUse, String time, int pnt, int pntH,
+Future<void> addCuestionario(String nameUse, String time, int pnt, int pntH,
     int pntO, int pntI, int pntA, int pntOr, int pntS) async {
   // Crea un nuevo documento en la subcolección 'Puntuaciones' del estudiante actual con los datos proporcionados.
+
   await db
       .collection("CuentaStudent")
       .doc(docuId)
+      .collection("Cuestionarios")
+      .doc("Cuestions ${a}")
       .collection("Puntuaciones")
       .add({
     "NameUserStudent": nameUse,
@@ -191,16 +320,59 @@ Future<void> addPunctuations(String nameUse, String time, int pnt, int pntH,
 Future<void> addInformeImg(Map<String, String> Img, String tipe) async {
   // Imprime el ID del documento del estudiante actual.
   print(docuId);
-
+  try {
+    final querySnapshot = await db
+        .collection("CuentaStudent")
+        .doc(docuId)
+        .collection("Cuestionarios")
+        .get();
+    final cantidadCuestionarios = querySnapshot.docs.length;
+    a = cantidadCuestionarios;
+    a++;
+    print("La cantidad de cuestionarios es $cantidadCuestionarios");
+  } catch (e) {
+    print('Ocurrió un error: $e');
+  }
   // Crea un nuevo documento en la subcolección 'ImagesProlec' del estudiante actual con los datos proporcionados.
   await db
       .collection("CuentaStudent")
       .doc(docuId)
+      .collection("Cuestionarios")
+      .doc("Cuestions $a")
       .collection("Informe")
-      .doc("Images")
-      .collection("ImagesProlec")
+      .doc("ImagesProlec")
+      .collection("Eleccion")
       .add({
     tipe: Img,
+  });
+
+  await addCFe();
+}
+
+Future<void> addCFe() async {
+  print(docuId);
+  DateTime now = DateTime.now();
+
+  CollectionReference cuentaCollection =
+      db.collection("CuentaStudent").doc(docuId).collection("Cuestionarios");
+  DocumentReference documentReference = cuentaCollection.doc("Cuestions $a");
+
+  await documentReference.set({
+    "Fecha": now,
+    // Otros campos si es necesario
+  });
+}
+
+Future<void> addGusto(List gustos, String tipe) async {
+  // Imprime el ID del documento del estudiante actual.
+  print(docuId);
+
+  CollectionReference cuentaCollection =
+      db.collection("CuentaStudent").doc(docuId).collection("Gustos");
+
+  // Crea un nuevo documento en la colección con los datos proporcionados.
+  DocumentReference documentReference = await cuentaCollection.add({
+    tipe: gustos,
   });
 }
 
@@ -221,12 +393,12 @@ Future<void> addInformeSt(List<Map<String, Map<String, String>>> res,
   await db
       .collection("CuentaStudent")
       .doc(docuId)
+      .collection("Cuestionarios")
+      .doc("Cuestions $a")
       .collection("Informe")
       .doc("Historias")
       .collection(titulo)
-      .add({
-    tipe: res,
-  });
+      .add({tipe: res});
 }
 
 /// Añade un nuevo informe de palabras a Firestore.
@@ -245,6 +417,8 @@ Future<void> addInforme(List<String> palabras, String name, String tipe) async {
   await db
       .collection("CuentaStudent")
       .doc(docuId)
+      .collection("Cuestionarios")
+      .doc("Cuestions $a")
       .collection("Informe")
       .doc("Words")
       .collection(name)
@@ -301,6 +475,65 @@ Future<List<OptionsText>> getStories() async {
     text.add(OptionsText(id, titulo, texto, questions, respuestas));
   }
   return text;
+}
+
+/// Obtiene una lista de historias de Firestore.
+///
+/// Esta función recupera una lista de historias de la subcolección 'Stories' en Firestore y las devuelve como una lista de objetos `OptionsText`.
+///
+/// @return Un `Future<List<OptionsText>>` que completa con la lista de objetos `OptionsText` cuando la operación de recuperación de la base de datos se ha realizado.
+Future<RxList> getCuestionarios() async {
+  RxList cuestionarios = [].obs;
+  print(docuId);
+  try {
+    final querySnapshot = await db
+        .collection("CuentaStudent")
+        .doc(docuId)
+        .collection("Cuestionarios")
+        .get();
+
+    int cantidadCuestionarios = querySnapshot.size;
+    querySnapshot.docs.forEach((document) {
+      String cuestionarioId = document.id;
+      Timestamp timestamp = (document.data() as Map<String, dynamic>)[
+          'Fecha']; // Ajusta la clave según la estructura de tus documentos
+      DateTime fechaCuestionario = timestamp.toDate();
+      // Guardar ID y fecha en la lista
+      Map<String, dynamic> cuestionarioInfo = {
+        "id": cuestionarioId,
+        'Fecha': fechaCuestionario,
+      };
+      cuestionarios.add(cuestionarioInfo);
+    });
+    print("La cantidad de cuestionarios es $cantidadCuestionarios");
+    print("Los cuestionarios son $cuestionarios");
+    return cuestionarios;
+  } catch (e) {
+    print('Ocurrió un error: $e');
+    return cuestionarios;
+  }
+}
+
+Future<bool> getGustos() async {
+  try {
+    final querySnapshot = await db
+        .collection("CuentaStudent")
+        .doc(docuId)
+        .collection("Gustos")
+        .get();
+
+    // Verificar si hay documentos en la colección
+    if (querySnapshot.docs.isNotEmpty) {
+      // Hay documentos en la colección
+      return true;
+    } else {
+      // No hay documentos en la colección
+      return false;
+    }
+  } catch (e) {
+    print('Ocurrió un error: $e');
+    return false;
+  }
 }
 
 /// Obtiene una lista de ortografías de Firestore.
@@ -364,7 +597,35 @@ Future<void> updateStudent(UserStudent user) async {
     "name": user.fullname,
     "birthdate": user.birthdate,
     "schoolYear": user.anioLec,
+    "age": user.age,
     "password": user.password,
     "idTeacher": user.idTeacher
   });
+}
+
+Future<List<ImgGustos>> getGustosOne() async {
+  List<ImgGustos> gus = [];
+  CollectionReference collectionReferenceImg =
+      db.collection("Data").doc("Images").collection("ImagenesGustos");
+  QuerySnapshot queryImg = await collectionReferenceImg.get();
+
+  for (var document in queryImg.docs) {
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+    int id = data['id'];
+    String questions = data['questions'];
+
+    // Check the actual type of data['UrlImages']
+    if (data['UrlImages'] is Map<String, dynamic>) {
+      Map<String, dynamic> imagData = data['UrlImages'];
+      Map<String, Map<String, bool>> imag = imagData.map((key, value) {
+        return MapEntry(key, Map<String, bool>.from(value));
+      });
+      gus.add(ImgGustos(id, questions, imag));
+    } else {
+      // Handle the case when data['UrlImages'] is not of the expected type
+      // You might want to log an error or handle it in a way that makes sense for your application.
+    }
+  }
+  return gus;
 }

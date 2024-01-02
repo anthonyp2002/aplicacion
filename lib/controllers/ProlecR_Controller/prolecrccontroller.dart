@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:aplicacion/controllers/UseController/studentcontroller.dart';
 import 'package:aplicacion/models/seudo.dart';
 import 'package:aplicacion/services/firebase_service.dart';
 import 'package:flutter/material.dart'
@@ -55,7 +56,7 @@ class ProlecRCController extends GetxController {
       if (pageController.page == seuModel.length - 1) {
         // ignore: avoid_print
         print("Acabado");
-        addPunctuations(use.fullname, tiempo, puntos, puntosH, puntosO,
+        addCuestionario(use.fullname, tiempo, puntos, puntosH, puntosO,
             puntosIA, puntosIB, puntosIC, puntuacion);
         addInforme(badResult, "Sinonimos", "ERRORES");
         addInforme(goodResult, "Sinonimos", "ACIERTOS");
@@ -77,7 +78,8 @@ class ProlecRCController extends GetxController {
           actions: [
             TextButton(
               onPressed: () {
-                Get.offAllNamed('/home');
+                Get.lazyPut(() => StudentController());
+                Get.offAllNamed('/studentPage');
               },
               child: const Text('Cerrar'),
             ),

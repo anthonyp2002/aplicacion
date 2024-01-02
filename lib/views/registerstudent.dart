@@ -58,6 +58,8 @@ class LoginStudentPage extends GetView<RegisterController> {
       controller.ageController.text = fechaNueva.toIso8601String().substring(0,
           10); // Actualiza el texto del controlador con la fecha seleccionada
     }
+    DateTime fecha = DateTime.parse(controller.ageController.text);
+    controller.calculateAge(fecha);
   }
 
   //Formulario

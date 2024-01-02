@@ -1,4 +1,5 @@
 // ignore: unusort
+import 'package:aplicacion/controllers/UseController/teachercontroller.dart';
 import 'package:aplicacion/controllers/initController.dart';
 import 'package:aplicacion/services/firebase_service.dart';
 //import 'package:aplicacion/controllers/guardarexcel.dart';
@@ -18,7 +19,7 @@ class RegisterController extends GetxController {
   final ageController = TextEditingController();
   final anioLecController = TextEditingController();
   final confirmController = TextEditingController();
-
+  RxInt age = 0.obs;
   @override
   void onInit() {
     fullNameControler.text = '';
@@ -77,7 +78,7 @@ class RegisterController extends GetxController {
     return null;
   }
 
-  void login() {
+  Future<void> login() async {
     // ignore: unused_local_variable
     final a = User(
         fullNameControler.text,
@@ -92,15 +93,16 @@ class RegisterController extends GetxController {
       print(a.fullname);
       // ignore: avoid_print
       print(a.anioLec);
-      addStudent(a.fullname, a.age, a.anioLec, a.password);
-      Get.offAllNamed('/prolec');
+      addStudent(a.fullname, a.age, age.toString(), a.anioLec, a.password);
+      // Get.offAllNamed('/prolec');
+      await Get.offAllNamed('/gustosPage');
       Get.find<InitController>().datos(a, "", 0, 0, 0, 0, 0, 0, 0);
     } else {
       Get.snackbar('Error', 'Verifique los campos');
     }
   }
 
-  void loginTe() {
+  void loginTe() async {
     final a = User(
         fullNameControler.text,
         ageController.text,
@@ -108,16 +110,31 @@ class RegisterController extends GetxController {
         gmailController.text,
         passwordController.text,
         phoneController.text);
+    Get.lazyPut(() => TeacherController());
+
     if (singinFormKey.currentState!.validate()) {
+      await addTea(
+          a.fullname, a.gmail, age.toString(), a.phone, a.age, a.password);
       Get.snackbar('Login', 'Registrado Correctamente');
-      // ignore: avoid_print
-      print(a.fullname);
-      // ignore: avoid_print
-      print(a.anioLec);
-      addTea(a.fullname, a.gmail, a.phone, a.age, a.password);
       Get.offAllNamed('/teacherPage');
     } else {
       Get.snackbar('Error', 'Verifique los campos');
+    }
+  }
+
+  int calculateAge(DateTime birthDate) {
+    final DateTime currentDate = DateTime.now();
+    age.value = currentDate.year - birthDate.year;
+
+    // Ajustar la edad si aún no ha llegado el cumpleaños en el año actual
+    if (currentDate.month < birthDate.month ||
+        (currentDate.month == birthDate.month &&
+            currentDate.day < birthDate.day)) {
+      print(age);
+      return (age.value - 1);
+    } else {
+      print(age);
+      return age.value;
     }
   }
 }

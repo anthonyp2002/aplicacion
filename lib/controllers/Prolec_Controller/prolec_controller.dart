@@ -38,11 +38,6 @@ class ProlecController extends GetxController {
     cargarPalabras();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   void iniciarCronometro() {
     cronometro = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       seconds.value++;
@@ -51,6 +46,7 @@ class ProlecController extends GetxController {
 
   void datos(User a) {
     use = a;
+    print("El use es $use");
     update();
   }
 

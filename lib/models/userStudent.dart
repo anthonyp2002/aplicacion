@@ -8,6 +8,7 @@ class UserStudent {
   final String idStudent;
   final String fullname;
   final String birthdate;
+  final String age;
   final String anioLec;
   final String password;
   final String idTeacher;
@@ -19,6 +20,7 @@ class UserStudent {
       {required this.idStudent,
       required this.fullname,
       required this.birthdate,
+      required this.age,
       required this.anioLec,
       required this.password,
       required this.idTeacher});
@@ -31,6 +33,7 @@ class UserStudent {
       idStudent: doc.id,
       fullname: doc['name'],
       birthdate: doc["birthdate"],
+      age: doc["age"],
       anioLec: doc["schoolYear"],
       password: doc["password"],
       idTeacher: doc['idTeacher'],

@@ -52,10 +52,14 @@ class ProlecDAController extends GetxController {
 
   void nextQuestions() {
     if (pageController.positions.isNotEmpty) {
+      Get.lazyPut(() => ProlecDBController);
+
       if (pageController.page == 2) {
         Get.offAllNamed('/prolecD_B');
+
         Get.find<ProlecDBController>()
             .datos(use, tiempo, puntos, puntosH, puntuacion);
+        Get.offAllNamed('/prolecD_B');
       } else {
         print("Paginas");
         print(pageController.positions.isNotEmpty);
@@ -94,6 +98,8 @@ class ProlecDAController extends GetxController {
             (yPosition.value >= 30 && yPosition.value <= 70);
       });
       if (positionMatched) {
+        xPosition = 0.0.obs;
+        yPosition = 0.0.obs;
         nextQuestions();
         puntuacion++;
       }

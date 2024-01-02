@@ -111,9 +111,10 @@ class ProlecDBController extends GetxController {
           puntosO = 5;
           print(puntosO);
           await Future.delayed(const Duration(seconds: 1), () {
+            User as = User("", "age", "", "gmail", "password", "phone");
             Get.offAllNamed('/prolecR');
             Get.find<InitController>()
-                .datos(use, tiempo, puntos, puntosH, puntosO, 0, 0, 0, 0);
+                .datos(as, tiempo, puntos, puntosH, puntosO, 0, 0, 0, 0);
           });
         }
       }

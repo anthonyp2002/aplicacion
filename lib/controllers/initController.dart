@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_print, unused_field
+import 'package:aplicacion/models/img_gustos.dart';
 import 'package:aplicacion/models/orto.dart';
 import 'package:aplicacion/models/prolcec_model.dart';
 import 'package:aplicacion/models/prolecb_model.dart';
@@ -56,6 +57,8 @@ class InitController extends GetxController {
   List<OptionsText> optionsText = [];
   List<SeudoModel> seuModel = [];
   List<OrtModel> ortografia = [];
+  List<ImgGustos> imggustos = [];
+  late PageController pageController;
 
   late Timer _textDisplayTimer;
   TtsState ttsState = TtsState.stopped;
@@ -72,6 +75,7 @@ class InitController extends GetxController {
     super.onInit();
     initTts();
     _speechTextStreamController = StreamController<String>.broadcast();
+    pageController = PageController(initialPage: 0);
   }
 
   void datos(User a, String tmp, int ptn, int pntH, int pntO, int pntIA,
@@ -102,6 +106,10 @@ class InitController extends GetxController {
 
   recuperarOrto() async {
     ortografia = await getOrtografia();
+  }
+
+  recuperarGusOne() async {
+    imggustos = await getGustosOne();
   }
 
   initTts() {

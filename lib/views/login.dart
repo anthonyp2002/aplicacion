@@ -67,10 +67,9 @@ class HomeLogin extends GetView<loginController> {
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 10)),
                                   TextFormField(
-                                    enableInteractiveSelection: false,
+                                    enableInteractiveSelection: true,
                                     autofocus: true,
-                                    textCapitalization:
-                                        TextCapitalization.characters,
+                                    controller: controller.user,
                                     decoration: InputDecoration(
                                         hintText: "Usuario",
                                         labelText: "Usuario",
@@ -88,10 +87,8 @@ class HomeLogin extends GetView<loginController> {
                                       children: [
                                         TextFormField(
                                           controller: controller.password,
-                                          enableInteractiveSelection: false,
+                                          enableInteractiveSelection: true,
                                           autofocus: true,
-                                          textCapitalization:
-                                              TextCapitalization.characters,
                                           decoration: InputDecoration(
                                             hintText: "Contraseña",
                                             labelText: "Contraseña",
@@ -118,7 +115,10 @@ class HomeLogin extends GetView<loginController> {
                                           vertical: 10)),
                                   RawMaterialButton(
                                     onPressed: () {
-                                      Get.offAllNamed('/teacherPage');
+                                      // Get.offAllNamed('/teacherPage');
+
+                                      controller.login(controller.user.text,
+                                          controller.password.text);
                                     },
                                     child: Text(
                                       'Ingresar',
