@@ -149,7 +149,10 @@ class ProlecDBController extends GetxController {
   void nextQuestions() {
     if (pageController.positions.isNotEmpty) {
       if (pageController.page == Instruc().optionsText.length - 1) {
-        Get.offAllNamed('/prolec');
+        User as = User("", "age", "", "gmail", "password", "phone");
+        Get.offAllNamed('/prolecR');
+        Get.find<InitController>()
+            .datos(as, tiempo, puntos, puntosH, puntosO, 0, 0, 0, 0);
         print("Pase");
       } else {
         pageController.nextPage(

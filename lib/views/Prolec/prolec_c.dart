@@ -142,117 +142,140 @@ class ProlecThree extends GetView<ProlecCController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 600;
+
     controller.datos(usuario, time, puntuacion);
     controller.optionsText = optionsTex;
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height -
-                      100, // Establecer una altura explícita
-                  child: PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: controller.pageController,
-                    itemCount: controller.optionsText.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                              child: Container(
-                            margin: const EdgeInsets.all(10),
-                            child: SizedBox(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    controller.optionsText[index].titulo!,
-                                    style: GoogleFonts.barlow(fontSize: 20),
-                                  ),
-                                  const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20)),
-                                  Expanded(
-                                    child: SizedBox(
-                                      width: 300,
-                                      height: 100,
-                                      child: SingleChildScrollView(
-                                        child: Text(
-                                          controller.optionsText[index].text!,
-                                          style:
-                                              GoogleFonts.barlow(fontSize: 20),
-                                          textAlign: TextAlign.justify,
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/prolec_tree.png'),
+                  fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
+                    Container(
+                      height: isDesktop
+                          ? MediaQuery.of(context).size.height - 350
+                          : MediaQuery.of(context).size.height - 100,
+                      width: isDesktop ? 700 : double.infinity,
+                      child: PageView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: controller.pageController,
+                        itemCount: controller.optionsText.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                margin: const EdgeInsets.all(10),
+                                child: SizedBox(
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        controller.optionsText[index].titulo!,
+                                        style: GoogleFonts.barlow(fontSize: 20),
+                                      ),
+                                      const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 20)),
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.white),
+                                          width: double.infinity,
+                                          height: isDesktop ? 50 : 100,
+                                          child: SingleChildScrollView(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 20),
+                                            child: Text(
+                                              controller
+                                                  .optionsText[index].text!,
+                                              style: GoogleFonts.barlow(
+                                                  fontSize: 20),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10)),
+                                      RawMaterialButton(
+                                        onPressed: () {
+                                          List<String> preguntas = controller
+                                              .optionsText[index].questions;
+                                          List<String> answers = controller
+                                              .optionsText[index].answer;
+                                          mostrarPreguntas(
+                                              context, preguntas, answers);
+                                          controller.changeVariableValue();
+                                          mostrarPreguntas(
+                                              context, preguntas, answers);
+                                          controller.changeVariableValue();
+                                          controller.tit = controller
+                                              .optionsText[index].titulo
+                                              .toString();
+                                        },
+                                        constraints: const BoxConstraints(
+                                          minHeight: 40,
+                                          minWidth: 150,
+                                        ),
+                                        fillColor: const Color.fromARGB(
+                                            255, 58, 133, 238),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(13),
+                                        ),
+                                        child: const Text(
+                                          'Ver Preguntas',
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                      MaterialButton(
+                                        onPressed: () {
+                                          Get.offAllNamed('/prolecD_A');
+                                          Get.find<InitController>().datos(
+                                              controller.use,
+                                              controller.tiempo,
+                                              controller.puntos,
+                                              6,
+                                              0,
+                                              0,
+                                              0,
+                                              0,
+                                              0);
+                                        },
+                                        child: const Text("Cambiar "),
+                                      )
+                                    ],
                                   ),
-                                  const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10)),
-                                  RawMaterialButton(
-                                    onPressed: () {
-                                      List<String> preguntas = controller
-                                          .optionsText[index].questions;
-                                      List<String> answers =
-                                          controller.optionsText[index].answer;
-                                      mostrarPreguntas(
-                                          context, preguntas, answers);
-                                      controller.changeVariableValue();
-                                      mostrarPreguntas(
-                                          context, preguntas, answers);
-                                      controller.changeVariableValue();
-                                      controller.tit = controller
-                                          .optionsText[index].titulo
-                                          .toString();
-                                    },
-                                    constraints: const BoxConstraints(
-                                      minHeight: 40,
-                                      minWidth: 150,
-                                    ),
-                                    fillColor:
-                                        const Color.fromARGB(255, 58, 133, 238),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(13),
-                                    ),
-                                    child: const Text(
-                                      'Ver Preguntas',
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                  MaterialButton(
-                                    onPressed: () {
-                                      Get.offAllNamed('/prolecD_A');
-                                      Get.find<InitController>().datos(
-                                          controller.use,
-                                          controller.tiempo,
-                                          controller.puntos,
-                                          6,
-                                          0,
-                                          0,
-                                          0,
-                                          0,
-                                          0);
-                                    },
-                                    child: const Text("Cambiar "),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )),
-                        ],
-                      );
-                    },
-                  ),
+                                ),
+                              )),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

@@ -60,6 +60,7 @@ class loginController extends GetxController {
             },
             child: const Text('Docente'),
           ),
+          const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
           ElevatedButton(
             onPressed: () {
               Get.offAllNamed('/registerStudent');

@@ -12,29 +12,53 @@ class LoginPage extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     Get.put(RegisterController());
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: SafeArea(
-          child: Container(
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context)
-                    .size
-                    .height), // Establece una restricción máxima de altura
-            child: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/fondo.png'), fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: SafeArea(
+                child: Container(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height,
+                      maxWidth: 400),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 10,
+                          offset: Offset(0, 5))
+                    ],
+                  ),
                   child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Crear Cuenta',
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 10)),
+                              const Text(
+                                'Crear Cuenta',
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 30),
+                              _form(context),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 30),
-                        _form(context),
-                      ],
+                      ),
                     ),
                   ),
                 ),

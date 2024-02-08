@@ -115,101 +115,124 @@ class GustosOne extends GetView<GustosController> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 600;
+    print(MediaQuery.of(context).size.height);
+    print(MediaQuery.of(context).size.width);
+
     Get.put(GustosController());
     controller.imggustos = imgGustos;
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height - 200,
-              child: PageView.builder(
-                controller: controller.pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.imggustos.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 315,
-                        height: 80,
-                        child: Text(
-                          controller.imggustos[index].questions!,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.ysabeau(fontSize: 20),
-                        ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15)),
-                      SizedBox(
-                        width: 400,
-                        height: 450,
-                        child: GridView.count(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          crossAxisCount: 1,
-                          children: controller.imggustos[index].imag!.entries
-                              .map((image) {
-                            return CheckboxListTile(
-                              title: Image.asset(image.value.entries.first.key),
-                              value: image.value.entries.first.value,
-                              onChanged: (bool? newValue) {
-                                setState(() {
-                                  Map<String, bool> updatedMap =
-                                      Map.from(image.value);
-                                  updatedMap[image.value.entries.first.key] =
-                                      newValue ?? false;
-                                  // Actualizar la lista imggustos en el controlador
-                                  controller.imggustos[index].imag![image.key] =
-                                      updatedMap;
-                                  controller.tipe =
-                                      controller.imggustos[index].questions!;
-                                  print(
-                                      "Seleccionaste ${image.value.entries.first.key}");
-                                  controller
-                                      .gustos(image.value.entries.first.key);
-                                  print(controller.selectedImages);
-                                });
-                              },
-                              subtitle: Text(image.key,
-                                  style: GoogleFonts.ysabeau(fontSize: 20)),
-                              activeColor: Colors.purple,
-                              checkColor: Colors.black,
-                              controlAffinity: ListTileControlAffinity.leading,
-                              tristate: true,
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    ],
-                  );
-                },
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/img_gust.png'), fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  height: isDesktop
+                      ? MediaQuery.of(context).size.height
+                      : MediaQuery.of(context).size.height - 200,
+                  width: MediaQuery.of(context).size.width,
+                  child: PageView.builder(
+                    controller: controller.pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.imggustos.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: isDesktop ? 500 : 315,
+                            height: 80,
+                            child: Text(
+                              controller.imggustos[index].questions!,
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.ysabeau(
+                                  fontSize: 25, color: Colors.black),
+                            ),
+                          ),
+                          const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 10)),
+                          SizedBox(
+                            width: isDesktop ? 900 : 400,
+                            height: isDesktop ? 750 : 400,
+                            child: GridView.count(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              crossAxisCount: isDesktop ? 3 : 1,
+                              children: controller
+                                  .imggustos[index].imag!.entries
+                                  .map((image) {
+                                return CheckboxListTile(
+                                  title: Image.asset(
+                                      image.value.entries.first.key),
+                                  value: image.value.entries.first.value,
+                                  onChanged: (bool? newValue) {
+                                    setState(() {
+                                      Map<String, bool> updatedMap =
+                                          Map.from(image.value);
+                                      updatedMap[image.value.entries.first
+                                          .key] = newValue ?? false;
+                                      // Actualizar la lista imggustos en el controlador
+                                      controller.imggustos[index]
+                                          .imag![image.key] = updatedMap;
+                                      controller.tipe = controller
+                                          .imggustos[index].questions!;
+                                      print(
+                                          "Seleccionaste ${image.value.entries.first.key}");
+                                      controller.gustos(
+                                          image.value.entries.first.key);
+                                      print(controller.selectedImages);
+                                    });
+                                  },
+                                  subtitle: Text(image.key,
+                                      style: GoogleFonts.ysabeau(
+                                          fontSize: 25, color: Colors.black)),
+                                  activeColor: Colors.purple,
+                                  checkColor: Colors.black,
+                                  controlAffinity:
+                                      ListTileControlAffinity.leading,
+                                  tristate: true,
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
               ),
             ),
+            floatingActionButton: RawMaterialButton(
+              onPressed: () {
+                controller.nextQuestions();
+              },
+              constraints: const BoxConstraints(
+                minHeight: 40,
+                minWidth: 150,
+              ),
+              fillColor: const Color.fromARGB(255, 58, 133, 238),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(13),
+              ),
+              child: const Text(
+                'Continuar',
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white),
+              ),
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
           ),
         ),
-        floatingActionButton: RawMaterialButton(
-          onPressed: () {
-            controller.nextQuestions();
-          },
-          constraints: const BoxConstraints(
-            minHeight: 40,
-            minWidth: 150,
-          ),
-          fillColor: const Color.fromARGB(255, 58, 133, 238),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(13),
-          ),
-          child: const Text(
-            'Continuar',
-            style: TextStyle(
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-                color: Colors.white),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
     });
   }

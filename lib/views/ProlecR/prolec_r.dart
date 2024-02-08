@@ -122,76 +122,88 @@ class ProlecFive extends GetView<ProlecRController> {
     controller.datos(usuario, time, puntuacion, puntH, puntO);
     controller.seuModel = seu;
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height - 100,
-                  child: PageView.builder(
-                    controller: controller.pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: controller.seuModel.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            controller.seuModel[index].palabras!,
-                            textAlign: TextAlign.center,
-                            style: GoogleFonts.barlow(fontSize: 30),
-                          ),
-                          const Padding(
-                              padding: EdgeInsets.symmetric(vertical: 20)),
-                          MaterialButton(
-                            onPressed: () {
-                              Get.offAllNamed('/prolecRA');
-                            },
-                            child: const Text("Cambiar "),
-                          ),
-                          SizedBox(
-                            width: 500,
-                            height: 500,
-                            child: GridView.count(
-                              crossAxisCount: 2,
-                              childAspectRatio: 3,
-                              children: controller
-                                  .seuModel[index].answer.entries
-                                  .map((palabras) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      controller.results(
-                                          palabras.value, palabras.key);
-                                      controller.nextQuestions();
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue.shade300,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          palabras.key,
-                                          style: const TextStyle(
-                                              fontSize: 25,
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ));
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/sex.png'), fit: BoxFit.cover),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height - 100,
+                      child: PageView.builder(
+                        controller: controller.pageController,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: controller.seuModel.length,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                controller.seuModel[index].palabras!,
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.barlow(fontSize: 30),
+                              ),
+                              const Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 20)),
+                              MaterialButton(
+                                onPressed: () {
+                                  Get.offAllNamed('/prolecRA');
+                                },
+                                child: const Text("Cambiar "),
+                              ),
+                              SizedBox(
+                                width: 500,
+                                height: 500,
+                                child: GridView.count(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 3,
+                                  children: controller
+                                      .seuModel[index].answer.entries
+                                      .map((palabras) {
+                                    return GestureDetector(
+                                        onTap: () {
+                                          controller.results(
+                                              palabras.value, palabras.key);
+                                          controller.nextQuestions();
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue.shade300,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              palabras.key,
+                                              style: const TextStyle(
+                                                  fontSize: 25,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ));
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

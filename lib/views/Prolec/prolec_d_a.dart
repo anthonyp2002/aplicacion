@@ -133,53 +133,64 @@ class ProlecFour extends GetView<ProlecDAController> {
     Get.put(ProlecDAController());
     controller.datos(usuario, time, puntos, puntosH);
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: ListView(
-          children: [
-            const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
-            Column(
-              mainAxisSize: MainAxisSize.min,
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/prolec_for.png'), fit: BoxFit.cover),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: ListView(
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height - 300,
-                  child: PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: controller.pageController,
-                    itemCount: 3,
-                    itemBuilder: (BuildContext context, int index) {
-                      if (index == 0) {
-                        return SizedBox(
-                          child: Center(
-                            child: Column(
-                              children: [
-                                _one(context, setState),
-                                const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 20)),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else if (index == 1) {
-                        return Center(
-                          child:
-                              Column(children: [_pictures(context, setState)]),
-                        );
-                      } else if (index == 2) {
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [imgpicures(context, setState)],
-                          ),
-                        );
-                      }
-                      return null;
-                    },
-                  ),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 50)),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height - 300,
+                      child: PageView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: controller.pageController,
+                        itemCount: 3,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (index == 0) {
+                            return SizedBox(
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    _one(context, setState),
+                                    const Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 20)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else if (index == 1) {
+                            return Center(
+                              child: Column(
+                                  children: [_pictures(context, setState)]),
+                            );
+                          } else if (index == 2) {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [imgpicures(context, setState)],
+                              ),
+                            );
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       );
     });

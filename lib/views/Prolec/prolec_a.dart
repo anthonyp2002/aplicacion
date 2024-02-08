@@ -122,111 +122,112 @@ class ProlecOne extends GetView<ProlecController> {
   @override
   Widget build(BuildContext context) {
     Get.put(InitController());
-
     Get.put(ProlecController());
     controller.startRecognition();
     controller.iniciarCronometro();
     controller.obtenerTiempoFormateado();
     controller.datos(usuario);
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Obx(
-          () => AvatarGlow(
-            endRadius: 75.0,
-            animate: true,
-            duration: const Duration(milliseconds: 2000),
-            glowColor: controller.isLisent.value ? Colors.blue : Colors.blue,
-            repeat: true,
-            repeatPauseDuration: const Duration(milliseconds: 100),
-            showTwoGlows: true,
-            child: GestureDetector(
-              onTapDown: (details) {
-                controller.startRecognition();
-              },
-              child: CircleAvatar(
-                backgroundColor:
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/prolec_one.png'), fit: BoxFit.cover),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: Obx(
+              () => AvatarGlow(
+                endRadius: 75.0,
+                animate: true,
+                duration: const Duration(milliseconds: 2000),
+                glowColor:
                     controller.isLisent.value ? Colors.blue : Colors.blue,
-                radius: 30,
-                child: Icon(
-                    controller.isLisent.value ? Icons.mic : Icons.mic_none,
-                    color: Colors.white),
+                repeat: true,
+                repeatPauseDuration: const Duration(milliseconds: 100),
+                showTwoGlows: true,
+                child: GestureDetector(
+                  onTapDown: (details) {
+                    controller.startRecognition();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor:
+                        controller.isLisent.value ? Colors.blue : Colors.blue,
+                    radius: 30,
+                    child: Icon(
+                        controller.isLisent.value ? Icons.mic : Icons.mic_none,
+                        color: Colors.white),
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color.fromRGBO(157, 192, 255, 1),
-                Color.fromRGBO(205, 255, 216, 1.0)
-              ],
-            ),
-          ),
-          child: Center(
-            child: Column(
-              children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 80)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.timer_outlined,
-                      color: Color.fromARGB(255, 35, 97, 232),
-                      size: 45,
-                    ),
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 5)),
-                    Obx(() => Text(
-                          controller.obtenerTiempoFormateado(),
-                          style: GoogleFonts.barlow(fontSize: 45),
-                        )),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  alignment: Alignment.center,
-                  width: 550,
-                  height: 200,
-                  child: Obx(
-                    () => Center(
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        childAspectRatio: 3,
-                        children: List.generate(
-                            controller.palabrasVisibles.length, (index) {
-                          return Container(
-                            margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 68, 137, 255),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                controller.palabrasVisibles[index],
-                                style: const TextStyle(
-                                    fontSize: 18, color: Colors.white),
+            body: Center(
+              child: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 80)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.timer_outlined,
+                        color: Color.fromARGB(255, 35, 97, 232),
+                        size: 45,
+                      ),
+                      const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5)),
+                      Obx(() => Text(
+                            controller.obtenerTiempoFormateado(),
+                            style: GoogleFonts.barlow(fontSize: 45),
+                          )),
+                    ],
+                  ),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    alignment: Alignment.center,
+                    width: 550,
+                    height: 200,
+                    child: Obx(
+                      () => Center(
+                        child: GridView.count(
+                          crossAxisCount: 2,
+                          childAspectRatio: 3,
+                          children: List.generate(
+                              controller.palabrasVisibles.length, (index) {
+                            return Container(
+                              margin: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 68, 137, 255),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            ),
-                          );
-                        }),
+                              child: Center(
+                                child: Text(
+                                  controller.palabrasVisibles[index],
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    Get.put(InitController());
-                    Get.offAllNamed('/prolecB');
-                    Get.find<InitController>()
-                        .datos(controller.use, "00:41", 0, 0, 0, 0, 0, 0, 0);
-                  },
-                  child: const Text("Cambiar "),
-                ),
-              ],
+                  MaterialButton(
+                    onPressed: () {
+                      Get.put(InitController());
+                      Get.offAllNamed('/prolecB');
+                      Get.find<InitController>()
+                          .datos(controller.use, "00:41", 0, 0, 0, 0, 0, 0, 0);
+                    },
+                    child: const Text("Cambiar "),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

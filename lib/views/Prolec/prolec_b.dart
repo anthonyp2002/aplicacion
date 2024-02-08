@@ -136,79 +136,101 @@ class ProlecTwo extends GetView<ProlecbController> {
     Get.put(ProlecbController());
     controller.datos(usuario, time);
     controller.imgOption = imgOptn;
+    final isDesktop = MediaQuery.of(context).size.width > 600;
+
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Padding(padding: EdgeInsets.symmetric(vertical: 35)),
-                SingleChildScrollView(
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height - 200,
-                    child: PageView.builder(
-                      controller: controller.pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.imgOption.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 315,
-                              height: 80,
-                              child: Text(
-                                controller.imgOption[index].questions!,
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.ysabeau(fontSize: 30),
-                              ),
-                            ),
-                            const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5)),
-                            SizedBox(
-                              width: 400,
-                              height: 400,
-                              child: GridView.count(
-                                crossAxisCount: 2,
-                                children: controller
-                                    .imgOption[index].answer.entries
-                                    .map((image) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      controller.results(
-                                        image.value,
-                                        controller.imgOption[index].questions!,
-                                        image.key,
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/prolec_two.png'),
+                  fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const Padding(padding: EdgeInsets.symmetric(vertical: 35)),
+                    SingleChildScrollView(
+                      child: Container(
+                        height: isDesktop
+                            ? MediaQuery.of(context).size.height
+                            : MediaQuery.of(context).size.height - 200,
+                        child: PageView.builder(
+                          controller: controller.pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: controller.imgOption.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: isDesktop ? 400 : 315,
+                                  height: isDesktop ? 90 : 80,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: const Color(0xFF17203A),
+                                  ),
+                                  child: Text(
+                                    controller.imgOption[index].questions!,
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.ysabeau(
+                                        fontSize: isDesktop ? 30 : 25,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                                const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 5)),
+                                SizedBox(
+                                  width: isDesktop ? 600 : 400,
+                                  height: isDesktop ? 600 : 400,
+                                  child: GridView.count(
+                                    crossAxisCount: 2,
+                                    children: controller
+                                        .imgOption[index].answer.entries
+                                        .map((image) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          controller.results(
+                                            image.value,
+                                            controller
+                                                .imgOption[index].questions!,
+                                            image.key,
+                                          );
+                                          controller.nextQuestions();
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Image.asset(
+                                            image.key,
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
                                       );
-                                      controller.nextQuestions();
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.all(4),
-                                      child: Image.asset(
-                                        image.key,
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                    MaterialButton(
+                      onPressed: () {
+                        Get.find<InitController>().datos(controller.use,
+                            controller.tiempo, 8, 0, 0, 0, 0, 0, 0);
+                        Get.offAllNamed('/prolecC');
+                      },
+                      child: const Text("Cambiar "),
+                    ),
+                  ],
                 ),
-                MaterialButton(
-                  onPressed: () {
-                    Get.find<InitController>().datos(
-                        controller.use, controller.tiempo, 8, 0, 0, 0, 0, 0, 0);
-                    Get.offAllNamed('/prolecC');
-                  },
-                  child: const Text("Cambiar "),
-                ),
-              ],
+              ),
             ),
           ),
         ),

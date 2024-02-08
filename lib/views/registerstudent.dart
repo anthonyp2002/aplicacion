@@ -12,29 +12,51 @@ class LoginStudentPage extends GetView<RegisterController> {
   Widget build(BuildContext context) {
     Get.put(RegisterController());
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        body: SafeArea(
-          child: Container(
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context)
-                    .size
-                    .height), // Establece una restricción máxima de altura
-            child: SingleChildScrollView(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/fondo.png'), fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Center(
+              child: SafeArea(
+                child: Container(
+                  constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height,
+                      maxWidth: 400),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 10,
+                          offset: Offset(0, 5))
+                    ],
+                  ),
                   child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Crear Cuenta',
-                          style: TextStyle(
-                              fontSize: 25.0, fontWeight: FontWeight.bold),
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Crear Cuenta',
+                                style: TextStyle(
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 30),
+                              _form(context, setState),
+                            ],
+                          ),
                         ),
-                        const SizedBox(height: 30),
-                        _form(context, setState),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -70,14 +92,17 @@ class LoginStudentPage extends GetView<RegisterController> {
       child: Form(
         key: controller.singinFormKey,
         child: Column(children: [
-          SizedBox(
+          Container(
             width: 270,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                  20.0), // ajusta el radio según tus necesidades
+            ),
             child: TextFormField(
               enableInteractiveSelection: false,
               autofocus: true,
               decoration: InputDecoration(
                   hintText: "Nombres",
-                  labelText: "Nombres",
                   suffixIcon: const Icon(Icons.person),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0))),
@@ -86,8 +111,12 @@ class LoginStudentPage extends GetView<RegisterController> {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-          SizedBox(
+          Container(
             width: 270,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                  20.0), // ajusta el radio según tus necesidades
+            ),
             child: TextFormField(
               keyboardType: TextInputType.number,
               enableInteractiveSelection: false,
@@ -95,7 +124,6 @@ class LoginStudentPage extends GetView<RegisterController> {
               readOnly: true,
               decoration: InputDecoration(
                   hintText: "Fecha De Nacimiento",
-                  labelText: "Fecha De Nacimiento",
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.calendar_month),
                     onPressed: () {
@@ -109,15 +137,18 @@ class LoginStudentPage extends GetView<RegisterController> {
             ),
           ),
           const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-          SizedBox(
+          Container(
             width: 270,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(
+                  20.0), // ajusta el radio según tus necesidades
+            ),
             child: TextFormField(
               keyboardType: TextInputType.number,
               enableInteractiveSelection: false,
               autofocus: true,
               decoration: InputDecoration(
                   hintText: "Año Lectivo",
-                  labelText: "Año Lectivo",
                   suffixIcon: const Icon(Icons.school),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0))),
@@ -130,14 +161,17 @@ class LoginStudentPage extends GetView<RegisterController> {
               builder: (BuildContext context, StateSetter setState) {
             return Column(
               children: [
-                SizedBox(
+                Container(
                   width: 270,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        20.0), // ajusta el radio según tus necesidades
+                  ),
                   child: TextFormField(
                       enableInteractiveSelection: false,
                       autofocus: true,
                       decoration: InputDecoration(
                           hintText: "Contraseña",
-                          labelText: "Contraseña",
                           suffixIcon: const Icon(Icons.lock),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0))),
@@ -146,14 +180,17 @@ class LoginStudentPage extends GetView<RegisterController> {
                       obscureText: obscu),
                 ),
                 const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                SizedBox(
+                Container(
                   width: 270,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        20.0), // ajusta el radio según tus necesidades
+                  ),
                   child: TextFormField(
                     enableInteractiveSelection: false,
                     autofocus: true,
                     decoration: InputDecoration(
                       hintText: "Confirmar Contraseña",
-                      labelText: "Confirmar Contraseña",
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20.0)),
                       suffixIcon: GestureDetector(
@@ -181,7 +218,6 @@ class LoginStudentPage extends GetView<RegisterController> {
                     minHeight: 40, // Altura mínima
                     minWidth: 100, // Ancho mínimo
                   ),
-                  fillColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(13),
                   ),
@@ -198,15 +234,18 @@ class LoginStudentPage extends GetView<RegisterController> {
                       children: [
                         const TextSpan(
                           text: 'Tienes una cuenta? ',
-                          style: TextStyle(fontSize: 15, color: Colors.black),
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
                           text: 'Login',
                           style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                          ),
+                              fontSize: 15,
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                              fontWeight: FontWeight.bold),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               FocusScope.of(context).unfocus();

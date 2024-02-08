@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable, non_constant_identifier_names
-
 import 'package:aplicacion/controllers/UseController/teachercontroller.dart';
 import 'package:aplicacion/models/userStudent.dart';
 import 'package:aplicacion/services/firebase_service.dart';
@@ -9,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icon.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:sidebarx/sidebarx.dart';
 
 class TeacherPage extends GetView<TeacherController> {
   List<Widget> buildWidgetList(context, setState) {
@@ -22,73 +22,165 @@ class TeacherPage extends GetView<TeacherController> {
   const TeacherPage({super.key});
   @override
   Widget build(BuildContext context) {
+    final isDesktop = MediaQuery.of(context).size.width > 600;
+
     return StatefulBuilder(builder: (context, setState) {
-      return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(60.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: AppBar(
-              title: const Text('Mi AppBar'),
-              shape: const ContinuousRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50.0),
-                  bottomRight: Radius.circular(50.0),
-                ),
-              ),
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Obx(() => buildWidgetList(context, setState)
-                .elementAt(controller.selectedIndex)),
-          ),
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 20,
-                color: Colors.black.withOpacity(.1),
-              )
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 25.0, vertical: 8),
-              child: GNav(
-                rippleColor: Colors.grey[300]!,
-                hoverColor: Colors.grey[100]!,
-                gap: 8,
-                activeColor: Colors.black,
-                iconSize: 24,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                duration: const Duration(milliseconds: 400),
-                tabBackgroundColor: Colors.grey[100]!,
-                color: Colors.black,
-                tabs: const [
-                  GButton(
-                    icon: LineIcons.home,
-                    text: 'Home',
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+        home: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/plantilla.png'),
+                  fit: BoxFit.cover)),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: isDesktop
+                ? null
+                : PreferredSize(
+                    preferredSize: const Size.fromHeight(60.0),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: AppBar(
+                        title: Center(
+                          child: Text('Mi AppBar',
+                              style: GoogleFonts.ysabeau(fontSize: 20)),
+                        ),
+                        backgroundColor: const Color(0xFF17203A),
+                      ),
+                    ),
                   ),
-                  GButton(
-                    icon: LineIcons.glasses,
-                    text: 'Alumnos',
+            body: isDesktop
+                ? Row(
+                    children: [
+                      SizedBox(
+                        width: 150,
+                        child: Row(
+                          children: [
+                            SidebarX(
+                              controller: SidebarXController(
+                                  selectedIndex: 0, extended: true),
+                              theme: const SidebarXTheme(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(30),
+                                        bottomRight: Radius.circular(30))),
+                                iconTheme: IconThemeData(
+                                  color: Colors.black,
+                                ),
+                                selectedTextStyle:
+                                    TextStyle(color: Colors.black),
+                              ),
+                              extendedTheme: const SidebarXTheme(
+                                width: 150,
+                              ),
+                              headerBuilder: (context, extended) {
+                                return const SizedBox(
+                                  height: 100,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 10)),
+                                      Icon(
+                                        LineIcons.userCircle,
+                                        size: 50,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              items: [
+                                SidebarXItem(
+                                  icon: LineIcons.home,
+                                  label: '  Home',
+                                  onTap: () {
+                                    controller.onTabChange(0);
+                                  },
+                                ),
+                                SidebarXItem(
+                                  icon: LineIcons.bookOpen,
+                                  label: '  Alumnos',
+                                  onTap: () {
+                                    controller.onTabChange(1);
+                                  },
+                                ),
+                                SidebarXItem(
+                                  icon: LineIcons.checkCircle,
+                                  label: 'Buscar',
+                                  onTap: () {
+                                    controller.onTabChange(2);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        // ...
+                      ),
+                      Expanded(
+                        child: Center(
+                          child: Obx(() => buildWidgetList(context, setState)
+                              .elementAt(controller.selectedIndex)),
+                        ),
+                      ),
+                    ],
+                  )
+                : SingleChildScrollView(
+                    child: Center(
+                      child: Obx(() => buildWidgetList(context, setState)
+                          .elementAt(controller.selectedIndex)),
+                    ),
                   ),
-                  GButton(
-                    icon: LineIcons.search,
-                    text: 'Buscar',
+            bottomNavigationBar: isDesktop
+                ? null
+                : Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 20,
+                          color: Colors.black.withOpacity(.1),
+                        )
+                      ],
+                    ),
+                    child: SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 25.0, vertical: 8),
+                        child: GNav(
+                          rippleColor: Colors.grey[300]!,
+                          hoverColor: Colors.grey[100]!,
+                          gap: 8,
+                          activeColor: Colors.black,
+                          iconSize: 24,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 15),
+                          duration: const Duration(milliseconds: 400),
+                          tabBackgroundColor: Colors.grey[100]!,
+                          color: Colors.black,
+                          tabs: const [
+                            GButton(
+                              icon: LineIcons.home,
+                              text: 'Home',
+                            ),
+                            GButton(
+                              icon: LineIcons.glasses,
+                              text: 'Alumnos',
+                            ),
+                            GButton(
+                              icon: LineIcons.search,
+                              text: 'Buscar',
+                            ),
+                          ],
+                          selectedIndex: controller.selectedIndex,
+                          onTabChange: controller.onTabChange,
+                        ),
+                      ),
+                    ),
                   ),
-                ],
-                selectedIndex: controller.selectedIndex,
-                onTabChange: controller.onTabChange,
-              ),
-            ),
           ),
         ),
       );
