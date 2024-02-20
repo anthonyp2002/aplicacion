@@ -138,8 +138,8 @@ Future<void> addIamges(
 Future<RxList<UserStudent>> getStuByName(String name) async {
   // Crea una lista observable de estudiantes.
   RxList<UserStudent> students = <UserStudent>[].obs;
-  print(docuIdTeacer);
-  print(name);
+  print("Id del profesor es $docuIdTeacer");
+  print("Estudiante a buscar $name");
   // Realiza la consulta a Firestore.
   await db
       .collection('CuentaStudent')
@@ -154,7 +154,12 @@ Future<RxList<UserStudent>> getStuByName(String name) async {
       print(doc);
     }
   });
+  // Devuelve la lista de estudiantes.
+  return students;
+}
 
+Future<RxInt> Cuestionarios(RxList<UserStudent> students) async {
+  RxInt cantidadCuestionarios = 0.obs;
   for (var student in students) {
     print(student.idStudent);
     final querySnapshot = await db
@@ -162,12 +167,11 @@ Future<RxList<UserStudent>> getStuByName(String name) async {
         .doc(student.idStudent)
         .collection("Cuestionarios")
         .get();
-    final cantidadCuestionarios = querySnapshot.docs.length;
+    cantidadCuestionarios = querySnapshot.docs.length.obs;
     print("La cantidad de cuestionarios es $cantidadCuestionarios");
   }
 
-  // Devuelve la lista de estudiantes.
-  return students;
+  return cantidadCuestionarios;
 }
 
 Future<String> verificarCredenciales(String name, String password) async {
@@ -188,12 +192,15 @@ Future<String> verificarCredenciales(String name, String password) async {
       return 'Student';
     }
 
-    // Consulta en la colección de estudiantes
+    print("El id de mi documento es $docuId");
+
     QuerySnapshot profesoresSnapshot = await FirebaseFirestore.instance
         .collection('CuentaTeacher')
         .where('name', isEqualTo: name)
         .where('password', isEqualTo: password)
         .get();
+
+    print(docuIdTeacer);
 
     if (profesoresSnapshot.docs.isNotEmpty) {
       String idT = profesoresSnapshot.docs[0].id;
@@ -201,6 +208,8 @@ Future<String> verificarCredenciales(String name, String password) async {
       print("El id de mi documento es $docuIdTeacer");
       return 'Teacher';
     }
+
+    print("El id de mi documento es $docuIdTeacer");
 
     // Si no se encuentra en ninguna colección
     return 'usuario_no_encontrado';
@@ -511,6 +520,73 @@ Future<RxList> getCuestionarios() async {
   } catch (e) {
     print('Ocurrió un error: $e');
     return cuestionarios;
+  }
+}
+
+Future<RxList> getCuestionariosID(String StudentId) async {
+  RxList cuestionarios = [].obs;
+  String cuestionarioId = "";
+  try {
+    final querySnapshot = await db
+        .collection("CuentaStudent")
+        .doc(StudentId)
+        .collection("Cuestionarios")
+        .get();
+
+    int cantidadCuestionarios = querySnapshot.size;
+    querySnapshot.docs.forEach((document) {
+      cuestionarioId = document.id;
+      Timestamp timestamp = (document.data() as Map<String, dynamic>)[
+          'Fecha']; // Ajusta la clave según la estructura de tus documentos
+      DateTime fechaCuestionario = timestamp.toDate();
+      // Guardar ID y fecha en la lista
+      Map<String, dynamic> cuestionarioInfo = {
+        "id": cuestionarioId,
+        'Fecha': fechaCuestionario,
+      };
+      cuestionarios.add(cuestionarioInfo);
+    });
+    print("La cantidad de cuestionarios es $cantidadCuestionarios");
+    print("Los cuestionarios son $cuestionarios");
+
+    //getCuesInfDe(StudentId, cuestionarioId);
+    return cuestionarios;
+  } catch (e) {
+    print('Ocurrió un error: $e');
+    return cuestionarios;
+  }
+}
+
+Future<Map<String, dynamic>?> getCuesInfDe(StudentId, CuestID) async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection("CuentaStudent")
+        .doc(StudentId)
+        .collection("Cuestionarios")
+        .doc(CuestID)
+        .collection("Puntuaciones")
+        .get();
+
+    // Verificar si hay documentos en la colección
+    if (querySnapshot.docs.isNotEmpty) {
+      // Obtener el primer documento (puedes ajustar esto según tus necesidades)
+      DocumentSnapshot doc = querySnapshot.docs[0];
+
+      // Acceder a los datos del documento
+      Map<String, dynamic> datos = doc.data() as Map<String, dynamic>;
+
+      // Hacer algo con los datos...
+      print("Datos del documento: $datos");
+
+      // Retornar el Map con los datos
+      return datos;
+    } else {
+      print("La colección está vacía");
+      return null;
+    }
+  } catch (error) {
+    print("Error al obtener datos: $error");
+    return null;
   }
 }
 

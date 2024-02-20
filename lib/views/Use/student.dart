@@ -29,186 +29,195 @@ class StudentPage extends GetView<StudentController> {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
-        home: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/plantilla.png'),
-                  fit: BoxFit.cover)),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: isDesktop
-                ? null
-                : PreferredSize(
-                    preferredSize: const Size.fromHeight(60.0),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: AppBar(
-                        title: Center(
-                          child: Text('Mi AppBar',
-                              style: GoogleFonts.ysabeau(fontSize: 20)),
+        home: Obx(() {
+          return Container(
+            decoration: BoxDecoration(
+              image: controller.selectedIndex == 1
+                  ? null // No background image for 'IA' page
+                  : const DecorationImage(
+                      image: AssetImage('assets/plantilla.png'),
+                      fit: BoxFit.cover,
+                    ),
+              color: controller.selectedIndex == 1 ? Colors.blue.shade50 : null,
+            ),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: isDesktop
+                  ? null
+                  : PreferredSize(
+                      preferredSize: const Size.fromHeight(60.0),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: AppBar(
+                          title: Center(
+                            child: Text('Mi AppBar',
+                                style: GoogleFonts.ysabeau(
+                                    fontSize: 20, color: Colors.white)),
+                          ),
+                          backgroundColor: const Color(0xFF17203A),
                         ),
-                        backgroundColor: const Color(0xFF17203A),
                       ),
                     ),
-                  ),
-            body: isDesktop
-                ? Row(
-                    children: [
-                      SizedBox(
-                        width: 150,
-                        child: Row(
-                          children: [
-                            SidebarX(
-                              controller: SidebarXController(
-                                  selectedIndex: 0, extended: true),
-                              theme: const SidebarXTheme(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(30),
-                                        bottomRight: Radius.circular(30))),
-                                iconTheme: IconThemeData(
-                                  color: Colors.black,
-                                ),
-                                selectedTextStyle:
-                                    TextStyle(color: Colors.black),
-                              ),
-                              extendedTheme: const SidebarXTheme(
-                                width: 150,
-                              ),
-                              headerBuilder: (context, extended) {
-                                return const SizedBox(
-                                  height: 100,
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10)),
-                                      Icon(
-                                        LineIcons.userCircle,
-                                        size: 50,
-                                        color: Colors.black,
-                                      ),
-                                    ],
+              body: isDesktop
+                  ? Row(
+                      children: [
+                        SizedBox(
+                          width: 150,
+                          child: Row(
+                            children: [
+                              SidebarX(
+                                controller: SidebarXController(
+                                    selectedIndex: 0, extended: true),
+                                theme: const SidebarXTheme(
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(30),
+                                          bottomRight: Radius.circular(30))),
+                                  iconTheme: IconThemeData(
+                                    color: Colors.black,
                                   ),
-                                );
-                              },
-                              items: [
-                                SidebarXItem(
-                                  icon: LineIcons.home,
-                                  label: '  Home',
-                                  onTap: () {
-                                    controller.onTabChange(0);
-                                  },
+                                  selectedTextStyle:
+                                      TextStyle(color: Colors.black),
                                 ),
-                                SidebarXItem(
-                                  icon: LineIcons.bookOpen,
-                                  label: '  IA',
-                                  onTap: () {
-                                    controller.onTabChange(1);
-                                    controller.animationController.reset();
-                                    if (controller.pageControllers.isEmpty) {
-                                      controller.pageControllers
-                                          .add(PageController());
-                                    }
-                                    if (controller.isPressed) {
-                                      controller.isPressed =
-                                          !controller.isPressed;
-                                    }
-                                  },
+                                extendedTheme: const SidebarXTheme(
+                                  width: 150,
                                 ),
-                                SidebarXItem(
-                                  icon: LineIcons.checkCircle,
-                                  label: '  Cuestionarios',
-                                  onTap: () {
-                                    controller.onTabChange(2);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                                headerBuilder: (context, extended) {
+                                  return const SizedBox(
+                                    height: 100,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10)),
+                                        Icon(
+                                          LineIcons.userCircle,
+                                          size: 50,
+                                          color: Colors.black,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                items: [
+                                  SidebarXItem(
+                                    icon: LineIcons.home,
+                                    label: '  Home',
+                                    onTap: () {
+                                      controller.onTabChange(0);
+                                    },
+                                  ),
+                                  SidebarXItem(
+                                    icon: LineIcons.bookOpen,
+                                    label: '  IA',
+                                    onTap: () {
+                                      controller.onTabChange(1);
+                                      controller.animationController.reset();
+                                      if (controller.pageControllers.isEmpty) {
+                                        controller.pageControllers
+                                            .add(PageController());
+                                      }
+                                      if (controller.isPressed) {
+                                        controller.isPressed =
+                                            !controller.isPressed;
+                                      }
+                                    },
+                                  ),
+                                  SidebarXItem(
+                                    icon: LineIcons.checkCircle,
+                                    label: '  Cuestionarios',
+                                    onTap: () {
+                                      controller.onTabChange(2);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          // ...
                         ),
-                        // ...
-                      ),
-                      Expanded(
+                        Expanded(
+                          child: Center(
+                            child: Obx(() => buildWidgetList(context, setState)
+                                .elementAt(controller.selectedIndex)),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Center(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxHeight: MediaQuery.of(context).size.height,
+                          maxWidth: 600,
+                        ),
                         child: Center(
                           child: Obx(() => buildWidgetList(context, setState)
                               .elementAt(controller.selectedIndex)),
                         ),
                       ),
-                    ],
-                  )
-                : Center(
-                    child: Container(
-                      constraints: BoxConstraints(
-                        maxHeight: MediaQuery.of(context).size.height,
-                        maxWidth: 600,
-                      ),
-                      child: Center(
-                        child: Obx(() => buildWidgetList(context, setState)
-                            .elementAt(controller.selectedIndex)),
-                      ),
                     ),
-                  ),
-            bottomNavigationBar: isDesktop
-                ? null
-                : Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 20,
-                          color: Colors.black.withOpacity(.1),
-                        ),
-                      ],
-                    ),
-                    child: SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 25.0, vertical: 8),
-                        child: GNav(
-                          rippleColor: Colors.grey[300]!,
-                          hoverColor: Colors.grey[100]!,
-                          gap: 8,
-                          activeColor: Colors.black,
-                          iconSize: 24,
+              bottomNavigationBar: isDesktop
+                  ? null
+                  : Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 20,
+                            color: Colors.black.withOpacity(.1),
+                          ),
+                        ],
+                      ),
+                      child: SafeArea(
+                        child: Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 15),
-                          duration: const Duration(milliseconds: 400),
-                          tabBackgroundColor: Colors.grey[100]!,
-                          color: Colors.black,
-                          tabs: [
-                            const GButton(
-                              icon: LineIcons.home,
-                              text: 'Home',
-                            ),
-                            GButton(
-                              icon: LineIcons.bookOpen,
-                              text: 'IA',
-                              onPressed: () {
-                                controller.animationController.reset();
-                                if (controller.pageControllers.isEmpty) {
-                                  controller.pageControllers
-                                      .add(PageController());
-                                }
-                                if (controller.isPressed) {
-                                  controller.isPressed = !controller.isPressed;
-                                }
-                              },
-                            ),
-                            const GButton(
-                              icon: LineIcons.checkCircle,
-                              text: 'Cuestionarios',
-                            ),
-                          ],
-                          selectedIndex: controller.selectedIndex,
-                          onTabChange: controller.onTabChange,
+                              horizontal: 25.0, vertical: 8),
+                          child: GNav(
+                            rippleColor: Colors.grey[300]!,
+                            hoverColor: Colors.grey[100]!,
+                            gap: 8,
+                            activeColor: Colors.black,
+                            iconSize: 24,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 15),
+                            duration: const Duration(milliseconds: 400),
+                            tabBackgroundColor: Colors.grey[100]!,
+                            color: Colors.black,
+                            tabs: [
+                              const GButton(
+                                icon: LineIcons.home,
+                                text: 'Home',
+                              ),
+                              GButton(
+                                icon: LineIcons.bookOpen,
+                                text: 'IA',
+                                onPressed: () {
+                                  controller.animationController.reset();
+                                  if (controller.pageControllers.isEmpty) {
+                                    controller.pageControllers
+                                        .add(PageController());
+                                  }
+                                  if (controller.isPressed) {
+                                    controller.isPressed =
+                                        !controller.isPressed;
+                                  }
+                                },
+                              ),
+                              const GButton(
+                                icon: LineIcons.checkCircle,
+                                text: 'Cuestionarios',
+                              ),
+                            ],
+                            selectedIndex: controller.selectedIndex,
+                            onTabChange: controller.onTabChange,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-          ),
-        ),
+            ),
+          );
+        }),
       );
     });
   }
@@ -647,10 +656,7 @@ Widget IA_text(setState, controller, context) {
                               ),
                               child: Column(
                                 children: [
-                                  const Text("Cuentos"),
-                                  Center(
-                                    child: Text('Página ${entry.key + 1}'),
-                                  ),
+                                  const Text("Cuento"),
                                   Obx(
                                     () => SizedBox(
                                       height: isDesktop ? 400 : 400,
@@ -813,9 +819,7 @@ Widget Navigation(setState, controller) {
         width: 250,
         height: double.infinity,
         alignment: AlignmentDirectional.bottomStart,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage('assets/fondli.png'), fit: BoxFit.cover)),
+        color: Colors.blue.shade50,
         child: SafeArea(
             child: Column(
           children: [

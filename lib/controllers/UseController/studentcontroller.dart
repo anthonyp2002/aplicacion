@@ -42,7 +42,9 @@ class StudentController extends GetxController
 
   void onTabChange(int index) {
     print('Changing to tab index $index');
+
     _selectedIndex.value = index;
+    print('Changing to tab index $selectedIndex');
   }
 
   @override

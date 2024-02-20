@@ -20,6 +20,10 @@ class TeacherController extends GetxController {
   final anioLecController = TextEditingController();
   final confirmController = TextEditingController();
   RxInt age = 0.obs;
+  RxInt number_cuestions = 0.obs;
+  bool num = false;
+  RxList cuestionarios = [].obs;
+
   int get selectedIndex => _selectedIndex.value;
   var student;
   void onTabChange(int index) {
@@ -63,11 +67,10 @@ class TeacherController extends GetxController {
 
   getStuden(String name) async {
     estudiante = await getStuByName(name);
+    number_cuestions = await Cuestionarios(estudiante);
     for (var estudiante in estudiante) {
-      print(estudiante.fullname);
+      cuestionarios = await getCuestionariosID(estudiante.idStudent);
     }
-    refresh();
-    update();
   }
 
   bool confirm() {
